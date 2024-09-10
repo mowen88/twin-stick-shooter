@@ -51,7 +51,11 @@ class Pause(BaseMenu):
 				elif ACTIONS['Menu Up'] or AXIS_PRESSED['Left Stick'][1] < 0:
 					self.index = (self.index - 1) % len(self.elements)
 
-			if self.selection == 'Quit to Menu' and ACTIONS['OK']:
+			if ACTIONS['OK'] and self.selection == 'Options':
+				from menus.options import OptionsMenu
+				OptionsMenu(self.game).enter_state()
+
+			elif ACTIONS['OK'] and self.selection == 'Quit to Menu':
 				self.exit_state()
 				self.prev_state.transition.on_complete = [self.prev_state.next_scene]
 				ACTIONS['OK'] = 0

@@ -20,7 +20,7 @@ class OptionsMenu(MainMenu):
 			#from menus.options import Options
 			#self.game.stack.pop()
 			#MainMenu(self.game).enter_state()
-			self.prev_state.transition.alpha = 255
+			#self.prev_state.transition.alpha = 255
 			self.exit_state()
 		else:
 			# if quit
