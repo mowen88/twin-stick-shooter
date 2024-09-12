@@ -8,22 +8,22 @@ class BaseMenu(State):
 	def __init__(self, game):
 		State.__init__(self, game)
 
-		self.navigation_timer = Timer(0.15)
+		self.navigation_timer = Timer(0.3)
 		self.navigation_timer.start()
 
 	def get_cursors(self):
 		cursors = []
 		for cursor in ['right','left']:
-			obj = AnimatedEntity([self.update_sprites, self.drawn_sprites], 18, f'../assets/particles/menu_cursor_{cursor}', z=3)
+			obj = AnimatedEntity([self.update_sprites, self.drawn_sprites], RES/2, 30, f'../assets/particles/menu_cursor_{cursor}', z=3)
 			cursors.append(obj)
 		return cursors
 
 	def get_elements(self):
 
 		panel_surface = pygame.image.load('../assets/misc_images/menu_panel.png') 
-		panel_element = Entity([self.drawn_sprites], RES/2, panel_surface, 'objects')
+		panel_element = Entity([self.drawn_sprites], RES/2, panel_surface, z=3)
 
-		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'])
+		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'],)
 		title_element = Entity([self.drawn_sprites], (WIDTH * 0.5, TILESIZE * 2), title_surface, z=3)
 		
 		elements = []
@@ -36,7 +36,7 @@ class BaseMenu(State):
 			offset += line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan'])
 			pos = start_x, start_y + offset
-			element = Entity([self.drawn_sprites], pos, surface, 'player')
+			element = Entity([self.drawn_sprites], pos, surface, z=3)
 			elements.append(element)
 		return elements
 
@@ -46,7 +46,10 @@ class BaseMenu(State):
 		self.update_sprites.update(dt)
 
 	def draw(self, screen):
-		self.drawn_sprites.draw(screen)
+		sorted_sprites = sorted(self.drawn_sprites, key=lambda sprite: sprite.z)
+		for sprite in sorted_sprites:
+			screen.blit(sprite.image, sprite.rect)
+		# self.drawn_sprites.draw(screen)
 
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
                     str('Stack: ' + str(len(self.game.stack))),

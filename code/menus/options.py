@@ -13,23 +13,18 @@ class OptionsMenu(MainMenu):
 		self.selection = self.element_list[self.index]
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
-		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 2000)
+		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 1000)
 
 	def next_scene(self):
-		if self.selection in ['Audio','Controls']:
-			#from menus.options import Options
-			#self.game.stack.pop()
-			#MainMenu(self.game).enter_state()
-			#self.prev_state.transition.alpha = 255
+		if self.selection in ['Audio','Controls','Back']:
+			self.prev_state.transition.alpha = 255
+			for cursor in self.prev_state.cursors:
+				cursor.frame_index = 0
 			self.exit_state()
-		else:
-			# if quit
-			self.game.quit()
+		# else:
+		# 	# if quit
+		# 	self.game.quit()
 
-	def update(self, dt):
-		self.navigate()
-		self.navigation_timer.update(dt)
-		self.update_sprites.update(dt)
 
 			
 

@@ -20,7 +20,6 @@ class Game:
         self.input = InputManager(self)
         
         self.stack = []
-        self.menu_state = True
         self.pygame_logo = PygameLogo(self)
         self.stack.append(self.pygame_logo)
 
@@ -51,7 +50,7 @@ class Game:
         pygame.display.flip()
 
     def main_loop(self):
-        dt = self.clock.tick(60)/1000
+        dt = self.clock.tick()/1000
         events = pygame.event.get()
         self.event_handler(events)
         self.update(dt)

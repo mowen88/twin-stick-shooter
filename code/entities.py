@@ -20,15 +20,16 @@ class Entity(pygame.sprite.Sprite):
 
 
 class AnimatedEntity(pygame.sprite.Sprite):
-    def __init__(self, groups, speed, path, z=1):
+    def __init__(self, groups, pos, speed, path, z=1):
         super().__init__(groups)
 
         self.speed = speed
+        self.z = z
         self.frame_index = 0
         self.frames = get_images(path)
         self.frame_count = len(self.frames)
         self.image = self.frames[self.frame_index]
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(center = pos)
 
     def animate(self, speed, animation_type='loop'):
         self.frame_index += speed
