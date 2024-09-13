@@ -50,7 +50,7 @@ BUTTON_MAPS = {
 				{'Attack':	0, 'Dash':1, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'OK':0, 'Back':20},
 			'DualSense Wireless Controller':
-				{'Attack':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':1, 'Dash':21, 'Inventory':4, 'Pause':0, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'OK':0, 'Back':0},
 			}
 

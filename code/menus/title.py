@@ -5,6 +5,7 @@ from entities import Entity, AnimatedEntity
 from transitions import Fade
 from timer import Timer
 from menus.base_menu import BaseMenu
+from menus.main_menu import MainMenu
 
 class BoxParticle(pygame.sprite.Sprite):
 	def __init__(self, groups, pos, colour, surf, z=1, alignment='topleft'):
@@ -35,7 +36,6 @@ class TitleScene(State):
 		State.__init__(self, game)
 
 		self.get_bg_particles()
-		from menus.main_menu import MainMenu
 		self.menu = MainMenu(self.game, self)
 		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 1000)
 
@@ -67,7 +67,7 @@ class TitleScene(State):
 
 		self.menu.draw(screen)
 
-		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
+		self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
                     str('Stack: ' + str(len(self.game.stack))),
                     str(self.transition.alpha),
                     None])

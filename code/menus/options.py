@@ -68,7 +68,7 @@ class Controls(BaseMenu):
 		self.index = 0
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
-		self.elements = self.get_elements()
+		self.elements = self.get_elements('midleft')
 		self.cursors = self.get_cursors()
 		self.alpha = 0
 

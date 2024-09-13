@@ -13,7 +13,6 @@ class Scene(State):
     def __init__(self, game):
         State.__init__(self, game)
 
-
         self.update_sprites.empty()
         self.drawn_sprites.empty()
         self.paused = False
@@ -63,17 +62,15 @@ class Scene(State):
     def draw(self, screen):
 
         screen.fill(self.bg_colour)
-        self.drawn_sprites.draw(screen)
 
         sorted_sprites = sorted(self.drawn_sprites, key=lambda sprite: sprite.z)
         for sprite in sorted_sprites:
             screen.blit(sprite.image, sprite.rect)
 
-        pygame.draw.rect(screen, COLOURS['white'], self.player.hitbox, 2)
-
         if self.paused:
             self.menu.draw(screen)
 
-        # self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
-        #             str('Stack: ' + str(len(self.game.stack))),
-        #             None])
+        self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
+                    str('Stack: ' + str(len(self.game.stack))),
+                    str(self.transition.alpha),
+                    None])

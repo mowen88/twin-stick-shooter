@@ -7,7 +7,6 @@ class MainMenu(BaseMenu):
 		super().__init__(game, scene)
 
 		self.menu_sprites.empty()
-		self.started = False
 		self.title = 'Main Menu'
 		self.element_list = ['Start Game','Options','Quit']
 		self.index = 0
@@ -21,7 +20,6 @@ class MainMenu(BaseMenu):
 		if ACTIONS['OK']:
 			if self.selection == 'Start Game':
 				self.scene.transition.on_complete = [self.scene.next_scene]
-				self.started = True
 			elif self.selection == 'Options':
 				from menus.options import Options
 				self.scene.menu = Options(self.game, self.scene)

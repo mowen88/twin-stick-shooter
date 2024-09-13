@@ -16,6 +16,7 @@ class Game:
         self.font = pygame.font.Font(FONT, 12)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
+        self.in_menu = False
         self.block_input = False
         self.input = InputManager(self)
         

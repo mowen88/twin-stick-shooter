@@ -9,7 +9,6 @@ class BaseMenu:
 
 		self.game = game
 		self.scene = scene
-		self.started = False
 		self.navigation_timer = Timer(0.3)
 		self.title = 'Press any key'
 		self.element_list = ['Press any key']
@@ -27,17 +26,22 @@ class BaseMenu:
 			cursors.append(obj)
 		return cursors
 
-	def get_elements(self):
+	def get_elements(self, alignment='center'):
 
-		panel_surface = pygame.image.load('../assets/misc_images/menu_panel.png') 
-		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, z=3)
+		# panel_surface = pygame.image.load('../assets/misc_images/menu_panel.png') 
+		panel_surface = pygame.Surface((180,HEIGHT))
+		panel_surface.fill((COLOURS['black']))
+		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, 3)
 
-		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'],)
-		title_element = Entity([self.menu_sprites], (self.panel_element.rect.centerx, self.panel_element.rect.top + TILESIZE*2), title_surface, z=3)
+		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'])
+		title_element = Entity([self.menu_sprites], (self.panel_element.rect.centerx, self.panel_element.rect.top + TILESIZE*2), title_surface, 3)
 		
 		elements = []
 		offset = 0
-		start_x = self.panel_element.rect.centerx
+
+		if alignment is not 'center': start_x = self.panel_element.rect.x + TILESIZE * 1.5
+		else: start_x = self.panel_element.rect.centerx
+					
 		start_y = TILESIZE * 4
 		line_spacing = TILESIZE
 
@@ -45,7 +49,7 @@ class BaseMenu:
 			offset += line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan'])
 			pos = start_x, start_y + offset
-			element = Entity([self.menu_sprites], pos, surface, z=3)
+			element = Entity([self.menu_sprites], pos, surface, 3, alignment)
 			elements.append(element)
 		return elements
 
@@ -73,8 +77,8 @@ class BaseMenu:
 			for cursor in self.cursors:
 				cursor.frame_index = 0
 
-		self.cursors[0].rect.midright = self.elements[self.index].rect.midleft
-		self.cursors[1].rect.midleft = self.elements[self.index].rect.midright
+		self.cursors[0].rect.midleft = self.panel_element.rect.left, self.elements[self.index].rect.centery
+		self.cursors[1].rect.midright = self.panel_element.rect.right, self.elements[self.index].rect.centery
 		self.selection = self.element_list[self.index]
 
 	def fade_in(self, speed):
@@ -83,7 +87,7 @@ class BaseMenu:
 			self.alpha = 255
 		for sprite in self.menu_sprites:
 			if sprite == self.panel_element:
-				sprite.image.set_alpha(min(self.alpha, 200))
+				sprite.image.set_alpha(min(self.alpha, 220))
 			else:
 				sprite.image.set_alpha(self.alpha)
 
@@ -99,5 +103,4 @@ class BaseMenu:
 		print(self.selection)
 
 	def draw(self, screen):
-		if not self.started:
-			self.menu_sprites.draw(screen)
+		self.menu_sprites.draw(screen)

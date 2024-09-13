@@ -20,7 +20,6 @@ class Pause(BaseMenu):
 		if ACTIONS['OK'] and self.selection == 'Quit to Menu':
 			self.scene.paused = not self.scene.paused
 			self.scene.transition.on_complete = [self.scene.next_scene]
-			self.scene.prev_state.menu.started = False
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
@@ -38,9 +37,8 @@ class Pause(BaseMenu):
 
 		elif ACTIONS['OK'] or ACTIONS['Pause']:
 			self.scene.paused = not self.scene.paused
-			ACTIONS['OK'] = 0
 			ACTIONS['Pause'] = 0
-			
+			ACTIONS['OK'] = 0
 		
 
 
