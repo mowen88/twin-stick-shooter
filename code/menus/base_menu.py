@@ -26,10 +26,10 @@ class BaseMenu:
 			cursors.append(obj)
 		return cursors
 
-	def get_elements(self, alignment='center'):
+	def get_elements(self, alignment='center', panel_width=144):
 
 		# panel_surface = pygame.image.load('../assets/misc_images/menu_panel.png') 
-		panel_surface = pygame.Surface((180,HEIGHT))
+		panel_surface = pygame.Surface((panel_width, HEIGHT))
 		panel_surface.fill((COLOURS['black']))
 		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, 3)
 
@@ -48,8 +48,13 @@ class BaseMenu:
 		for option in self.element_list:
 			offset += line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan'])
-			pos = start_x, start_y + offset
-			element = Entity([self.menu_sprites], pos, surface, 3, alignment)
+			
+			if option is not 'Back': 
+				pos = start_x, start_y + offset
+				element = Entity([self.menu_sprites], pos, surface, 3, alignment)
+			else:
+				pos = self.panel_element.rect.centerx, start_y + offset + TILESIZE
+				element = Entity([self.menu_sprites], pos, surface, 3)
 			elements.append(element)
 		return elements
 
