@@ -3,7 +3,7 @@ from state import State
 from settings import *
 from entities import Entity
 from transitions import Fade
-from menus.menu import MainMenu
+from menus.title import TitleScene
 
 class PygameLogo(State):
 	def __init__(self, game):
@@ -18,7 +18,7 @@ class PygameLogo(State):
 		# splash screen never needed on state stack again
 		#self.game.stack.pop()
 		# MenuBG(self.game).enter_state()
-		MainMenu(self.game).enter_state()
+		TitleScene(self.game).enter_state()
 
 	def update(self, dt):
 		if self.timer >= self.duration: self.transition.on_complete = [self.next_scene]

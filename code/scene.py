@@ -19,9 +19,9 @@ class Scene(State):
         self.paused = False
         self.bg_colour = COLOURS['grey']
         self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (HALF_WIDTH, HALF_HEIGHT), 'characters/player', z=3)
-        self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 500)
+        self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 250)
         self.menu = Pause(self.game, self)
-        ACTIONS['Pause'] = 0 # if hold pause while fading in, pause menu does not activate, only when explicitly pressed
+        #ACTIONS['Pause'] = 0 # if hold pause while fading in, pause menu does not activate, only when explicitly pressed
   
     def next_scene(self):
         #from menus.options import Options
@@ -59,7 +59,6 @@ class Scene(State):
         # if self.quit_to_menu:
         #     self.paused = False
         #     self.transition.on_complete = [self.next_scene]
-
 
     def draw(self, screen):
 
