@@ -11,7 +11,7 @@ class InputManager:
         self.control_type = self.update_control_type()
         self.axis_flags = AXIS_PRESSED.copy()
         self.bind_mode = False
-        self.new_bind = self.control_type
+        self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
 
     def update_control_type(self):
         self.control_type = self.joystick.get_name() if self.joystick is not None else 'Keyboard and Mouse'
@@ -30,9 +30,14 @@ class InputManager:
         self.update_control_type()
         AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right Trigger':0, 'D-Pad':(0,0)}
 
+    def get_hats(self):
+
+        if not (self.game.block_input or self.bind_mode) and self.joystick:
+          pass
+
     def get_triggers(self):
 
-        if not self.game.block_input:
+        if not (self.game.block_input or self.bind_mode):
         
             triggers = {'Left Trigger': 20, 'Right Trigger': 21}
             button_map = BUTTON_MAPS[self.joystick_name]
@@ -59,10 +64,38 @@ class InputManager:
     def get_input(self, events):
 
         for event in events:
+
             if event.type == pygame.QUIT:
                 self.game.quit()
 
+            if event.type == pygame.MOUSEWHEEL:
+
+                if event.y > 0: val = 4
+                else: val = 5
+                if self.bind_mode: self.new_bind['Keyboard'] = val
+                
+                for action, value in KEY_MAP.items():
+                    if val in value:
+                        ACTIONS[action] = 1 
+
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
+                
+                for action, value in KEY_MAP.items():
+                    if event.button in value:
+                        ACTIONS[action] = 1      
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                #print(event.button)
+                for action, value in KEY_MAP.items():
+                    if event.button in value:
+                        ACTIONS[action] = 0
+
             if event.type == pygame.KEYDOWN:
+                if self.bind_mode: self.new_bind['Keyboard'] = event.key
+
                 self.update_control_type()
                 for action, value in KEY_MAP.items():
                     if event.key in value:
@@ -100,8 +133,7 @@ class InputManager:
 
                 if event.type == pygame.JOYHATMOTION:
                     direction = event.value
-                    AXIS_PRESSED.update({'D-Pad':direction})
-                    print(AXIS_PRESSED['D-Pad'])
+                    AXIS_PRESSED['D-Pad'] = direction
 
                 if event.type == pygame.JOYAXISMOTION:
                     # Get left stick axes

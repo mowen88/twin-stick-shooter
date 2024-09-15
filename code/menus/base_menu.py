@@ -38,24 +38,21 @@ class BaseMenu:
 		
 		elements = []
 		offset = 0
-
-		if alignment is not 'center': start_x = self.panel_element.rect.x + TILESIZE * 1.5
-		else: start_x = self.panel_element.rect.centerx
-					
+	
 		start_y = TILESIZE * 4
 		line_spacing = TILESIZE
 
 		for option in self.element_list:
 			offset += line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan'])
-			
-			if option is not 'Back': 
-				pos = start_x, start_y + offset
-				element = Entity([self.menu_sprites], pos, surface, 3, alignment)
-			else:
-				pos = self.panel_element.rect.centerx, start_y + offset + TILESIZE
-				element = Entity([self.menu_sprites], pos, surface, 3)
+
+			special_option = option in ['Back', 'Quit', 'Quit to Menu']
+			start_x = self.panel_element.rect.centerx if special_option or alignment == 'center' else self.panel_element.rect.x + TILESIZE * 1.5
+			pos = (start_x, start_y + offset + (TILESIZE * 0.5 if special_option else 0))
+
+			element = Entity([self.menu_sprites], pos, surface, 3, alignment if not special_option else None)
 			elements.append(element)
+
 		return elements
 
 	def navigate(self):
@@ -66,7 +63,7 @@ class BaseMenu:
 		if self.alpha == 255 and not self.game.block_input:
 			self.next_scene()	
 
-			if not self.navigation_timer.running:
+			if not self.navigation_timer.running and not self.game.input.bind_mode:
 				if ACTIONS['Menu Down'] or ACTIONS['Menu Up'] or abs(AXIS_PRESSED['Left Stick'][1]) > 0:
 					self.navigation_timer.start()
 					for cursor in self.cursors:
@@ -105,7 +102,6 @@ class BaseMenu:
 		self.navigation_timer.update(dt)
 		self.menu_sprites.update(dt)
 
-		print(self.selection)
 
 	def draw(self, screen):
 		self.menu_sprites.draw(screen)

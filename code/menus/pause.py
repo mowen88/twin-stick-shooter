@@ -35,10 +35,13 @@ class Pause(BaseMenu):
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
-		elif ACTIONS['OK'] or ACTIONS['Pause']:
+		elif ACTIONS['OK'] or ACTIONS['Pause'] or ACTIONS['Back']:
 			self.scene.paused = not self.scene.paused
 			ACTIONS['Pause'] = 0
 			ACTIONS['OK'] = 0
+			ACTIONS['Back'] = 0
+
+
 		
 
 

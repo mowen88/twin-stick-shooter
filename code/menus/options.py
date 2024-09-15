@@ -1,7 +1,8 @@
 from settings import *
 from entities import Entity, AnimatedEntity
 from menus.main_menu import MainMenu
-from menus.base_menu import BaseMenu
+from menus.base_menu import BaseMenu 
+from menus.pause import Pause
 
 class Options(BaseMenu):
 	def __init__(self, game, scene):
@@ -20,7 +21,6 @@ class Options(BaseMenu):
 		if ACTIONS['OK']:
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'):
-					from menus.pause import Pause
 					self.scene.menu = Pause(self.game, self.scene)
 				else:
 					self.scene.menu = MainMenu(self.game, self.scene)
@@ -31,6 +31,14 @@ class Options(BaseMenu):
 			elif self.selection == 'Controls':
 				self.scene.menu = Controls(self.game, self.scene)
 
+			for action in ACTIONS:
+				ACTIONS[action] = 0
+
+		elif ACTIONS['Back']:
+			if hasattr(self.scene, 'paused'):
+				self.scene.menu = Pause(self.game, self.scene)
+			else:
+				self.scene.menu = MainMenu(self.game, self.scene)
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
@@ -59,6 +67,11 @@ class Audio(BaseMenu):
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
+		elif ACTIONS['Back']:
+			self.scene.menu = Options(self.game, self.scene)
+			for action in ACTIONS:
+				ACTIONS[action] = 0
+
 class Controls(BaseMenu):
 	def __init__(self, game, scene):
 		super().__init__(game, scene)
@@ -81,8 +94,18 @@ class Controls(BaseMenu):
 				else:
 					self.scene.menu = Options(self.game, self.scene)
 
+			elif self.selection == 'Keyboard':
+				from menus.bind_keyboard import BindKeyboard
+				self.scene.menu = BindKeyboard(self.game, self.scene)
+
 			for action in ACTIONS:
 				ACTIONS[action] = 0
+
+		elif ACTIONS['Back']:
+			self.scene.menu = Options(self.game, self.scene)
+			for action in ACTIONS:
+				ACTIONS[action] = 0
+
 
 
 

@@ -12,8 +12,8 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
-        self.font = pygame.font.Font(FONT, 12)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+        self.font = pygame.font.Font(FONT, 9)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
         self.in_menu = False
@@ -57,8 +57,6 @@ class Game:
         self.update(dt)
         self.draw(self.screen)
 
-
-        #print(AXIS_PRESSED)
 
 if __name__ == "__main__":
     game = Game()
