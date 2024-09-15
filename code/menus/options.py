@@ -94,6 +94,10 @@ class Controls(BaseMenu):
 				else:
 					self.scene.menu = Options(self.game, self.scene)
 
+			elif self.selection == 'Controller':
+				from menus.bind_controller import BindController
+				self.scene.menu = BindController(self.game, self.scene)
+
 			elif self.selection == 'Keyboard':
 				from menus.bind_keyboard import BindKeyboard
 				self.scene.menu = BindKeyboard(self.game, self.scene)

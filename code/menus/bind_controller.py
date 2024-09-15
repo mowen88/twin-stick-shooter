@@ -3,7 +3,7 @@ from entities import Entity, AnimatedEntity
 from menus.options import Options
 from menus.base_menu import BaseMenu
 
-class BindKeyboard(BaseMenu):
+class BindController(BaseMenu):
 	def __init__(self, game, scene, index=0):
 		super().__init__(game, scene)
 

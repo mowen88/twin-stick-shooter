@@ -13,8 +13,9 @@ class InputManager:
         self.bind_mode = False
         self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
 
-    def update_control_type(self):
-        self.control_type = self.joystick.get_name() if self.joystick is not None else 'Keyboard and Mouse'
+    def update_control_type(self, joystick=None):
+        if joystick: self.control_type = joystick
+        else: self.control_type = 'Keyboard and Mouse'
 
     def add_joystick(self, joy_index):
         self.joystick = pygame.joystick.Joystick(joy_index)
@@ -63,13 +64,15 @@ class InputManager:
 
     def get_input(self, events):
 
+        print(self.control_type)
+
         for event in events:
 
             if event.type == pygame.QUIT:
                 self.game.quit()
 
             if event.type == pygame.MOUSEWHEEL:
-
+                self.update_control_type()
                 if event.y > 0: val = 4
                 else: val = 5
                 if self.bind_mode: self.new_bind['Keyboard'] = val
@@ -80,7 +83,7 @@ class InputManager:
 
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-
+                self.update_control_type()
                 if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
                 
                 for action, value in KEY_MAP.items():
@@ -117,7 +120,7 @@ class InputManager:
 
                 if event.type == pygame.JOYBUTTONDOWN:
 
-                    self.update_control_type()
+                    self.update_control_type(self.joystick_name)
                     #self.new_bind = self.update_binding(event.button, guid)
                     for action, value in button_map.items():
                         if value == event.button:
@@ -128,14 +131,16 @@ class InputManager:
                         if value == event.button:
                             ACTIONS[action] = 0
 
-                if event.type == pygame.JOYHATMOTION:
-                    self.direction = (event.value[0], -event.value[1])
+                # if event.type == pygame.JOYHATMOTION:
+                #     self.direction = (event.value[0], -event.value[1])
 
                 if event.type == pygame.JOYHATMOTION:
+                    self.update_control_type(self.joystick_name)
                     direction = event.value
                     AXIS_PRESSED['D-Pad'] = direction
 
                 if event.type == pygame.JOYAXISMOTION:
+                    self.update_control_type(self.joystick_name)
                     # Get left stick axes
                     ls_x = self.joystick.get_axis(0)
                     ls_y = self.joystick.get_axis(1)
