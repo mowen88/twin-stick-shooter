@@ -17,7 +17,12 @@ class BaseMenu:
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
+		self.mouse_cursor = self.get_mouse_cursor()
 		self.alpha = 0
+
+	def get_mouse_cursor(self):
+		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.Surface((10,10)), 6)
+		return cursor
 
 	def get_cursors(self):
 		cursors = []
@@ -100,7 +105,7 @@ class BaseMenu:
 			self.alpha = 255
 		for sprite in self.menu_sprites:
 			if sprite == self.panel_element:
-				sprite.image.set_alpha(min(self.alpha, 220))
+				sprite.image.set_alpha(min(self.alpha, 200))
 			else:
 				sprite.image.set_alpha(self.alpha)
 
@@ -112,7 +117,9 @@ class BaseMenu:
 		self.navigate()
 		self.navigation_timer.update(dt)
 		self.menu_sprites.update(dt)
-
+		self.mouse_cursor.rect.center = self.game.input.mouse_pos
 
 	def draw(self, screen):
-		self.menu_sprites.draw(screen)
+		sorted_sprites = sorted(self.menu_sprites, key=lambda sprite: sprite.z)
+		for sprite in sorted_sprites:
+			screen.blit(sprite.image, sprite.rect)

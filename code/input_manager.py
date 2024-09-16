@@ -14,9 +14,8 @@ class InputManager:
         self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
         self.mouse_pos = vec2()
 
-    def update_control_type(self, joystick=None):
-        if joystick: self.control_type = joystick
-        else: self.control_type = 'Keyboard and Mouse'
+    def update_control_type(self):
+        self.control_type = self.joystick.get_name() if self.joystick is not None else'Keyboard'
 
     def add_joystick(self, joy_index):
         self.joystick = pygame.joystick.Joystick(joy_index)
@@ -65,62 +64,22 @@ class InputManager:
 
     def get_input(self, events):
 
-        self.mouse_pos = vec2(pygame.mouse.get_pos())
+
+        print(self.control_type)
 
         for event in events:
 
             if event.type == pygame.QUIT:
                 self.game.quit()
 
-            if event.type == pygame.MOUSEWHEEL:
-                self.update_control_type()
-                if event.y > 0: val = 4
-                else: val = 5
-                if self.bind_mode: self.new_bind['Keyboard'] = val
-                
-                for action, value in KEY_MAP.items():
-                    if val in value:
-                        ACTIONS[action] = 1 
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.update_control_type()
-                if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
-                
-                for action, value in KEY_MAP.items():
-                    if event.button in value:
-                        ACTIONS[action] = 1      
-
-            if event.type == pygame.MOUSEBUTTONUP:
-                #print(event.button)
-                for action, value in KEY_MAP.items():
-                    if event.button in value:
-                        ACTIONS[action] = 0
-
-            if event.type == pygame.KEYDOWN:
-                if self.bind_mode: self.new_bind['Keyboard'] = event.key
-
-                self.update_control_type()
-                for action, value in KEY_MAP.items():
-                    if event.key in value:
-                        ACTIONS[action] = 1
-
-            if event.type == pygame.KEYUP:
-                for action, value in KEY_MAP.items():
-                    if event.key in value:
-                        ACTIONS[action] = 0
-
-            if event.type == pygame.JOYDEVICEADDED:
-                self.add_joystick(event.device_index)
-
-            if event.type == pygame.JOYDEVICEREMOVED:
-                self.remove_joystick()
-
             if self.joystick:
+
+                if event.type == pygame.JOYDEVICEREMOVED:
+                    self.remove_joystick()
+
                 button_map = BUTTON_MAPS[self.joystick_name]
 
                 if event.type == pygame.JOYBUTTONDOWN:
-
-                    self.update_control_type(self.joystick_name)
                     #self.new_bind = self.update_binding(event.button, guid)
                     for action, value in button_map.items():
                         if value == event.button:
@@ -140,7 +99,6 @@ class InputManager:
                     AXIS_PRESSED['D-Pad'] = direction
 
                 if event.type == pygame.JOYAXISMOTION:
-                    self.update_control_type(self.joystick_name)
                     # Get left stick axes
                     ls_x = self.joystick.get_axis(0)
                     ls_y = self.joystick.get_axis(1)
@@ -164,3 +122,46 @@ class InputManager:
                     AXIS_PRESSED.update({'Left Stick':left_stick,'Right Stick':right_stick,
                                         'Left Trigger':left_trigger,'Right Trigger':right_trigger})
                 self.get_triggers()
+
+            else:
+                self.mouse_pos = vec2(pygame.mouse.get_pos())
+
+
+                if event.type == pygame.MOUSEWHEEL:
+                    if event.y > 0: val = 4
+                    else: val = 5
+                    if self.bind_mode: self.new_bind['Keyboard'] = val
+                    
+                    for action, value in KEY_MAP.items():
+                        if val in value:
+                            ACTIONS[action] = 1 
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
+                    
+                    for action, value in KEY_MAP.items():
+                        if event.button in value:
+                            ACTIONS[action] = 1      
+
+                if event.type == pygame.MOUSEBUTTONUP:
+                    #print(event.button)
+                    for action, value in KEY_MAP.items():
+                        if event.button in value:
+                            ACTIONS[action] = 0
+
+                if event.type == pygame.KEYDOWN:
+                    if self.bind_mode: self.new_bind['Keyboard'] = event.key
+
+                    for action, value in KEY_MAP.items():
+                        if event.key in value:
+                            ACTIONS[action] = 1
+
+                if event.type == pygame.KEYUP:
+                    for action, value in KEY_MAP.items():
+                        if event.key in value:
+                            ACTIONS[action] = 0
+
+                if event.type == pygame.JOYDEVICEADDED:
+                    self.add_joystick(event.device_index)
+
+                
