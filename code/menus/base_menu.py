@@ -55,13 +55,24 @@ class BaseMenu:
 
 		return elements
 
+	def mouse_navigation(self):
+		prev_index = self.index
+		for index, element in enumerate(self.elements):
+			element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y, self.panel_element.rect.width, element.rect.height)
+			if element_rect.collidepoint(self.game.input.mouse_pos):
+				self.index = index
+		if self.index != prev_index:
+			for cursor in self.cursors:
+				cursor.frame_index = 0
+
 	def navigate(self):
 
 		if self.navigation_timer.running and not (ACTIONS['Menu Down'] or ACTIONS['Menu Up'] or abs(AXIS_PRESSED['Left Stick'][1]) > 0):
 			self.navigation_timer.stop()
 
 		if self.alpha == 255 and not self.game.block_input:
-			self.next_scene()	
+			self.next_scene()
+			self.mouse_navigation()
 
 			if not self.navigation_timer.running and not self.game.input.bind_mode:
 				if ACTIONS['Menu Down'] or ACTIONS['Menu Up'] or abs(AXIS_PRESSED['Left Stick'][1]) > 0:

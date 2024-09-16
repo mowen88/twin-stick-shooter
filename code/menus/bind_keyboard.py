@@ -49,29 +49,25 @@ class BindKeyboard(BaseMenu):
 	            size = (self.panel_element.rect.width, 12)
 	            message = f'Press a key for {self.element_list[self.index]}'
 	            blank = Entity([self.menu_sprites], pos, pygame.Surface(size), 5)
-	            blank.image.fill(COLOURS['orange'])
-	            text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['white']), 5)
+	            blank.image.fill(COLOURS['cyan'])
+	            text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['black']), 5)
 	            self.instantiate_images = False
 
 	        if self.game.input.new_bind['Keyboard'] != 0:
 	            new_key = self.game.input.new_bind['Keyboard']
 	            current_action = self.selection
-
-	            # Check for duplicate keys
-	            for action, key in KEY_MAP.items():
+  
+	            for action, key in KEY_MAP.items(): # Check for duplicates
 	                if key[0] == new_key and action != current_action:
 	                    # Swap keys
 	                    KEY_MAP[action] = KEY_MAP[current_action]
 	                    break
 
-	            # Assign new key to the selected action
-	            KEY_MAP[current_action] = [new_key]
+	            KEY_MAP[current_action] = [new_key] # Assign new key to the action
 
-	            # Reset actions
 	            for action in ACTIONS:
 	                ACTIONS[action] = 0
 
-	            # Refresh the menu to reflect changes
 	            self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
 
 

@@ -12,6 +12,7 @@ class InputManager:
         self.axis_flags = AXIS_PRESSED.copy()
         self.bind_mode = False
         self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
+        self.mouse_pos = vec2()
 
     def update_control_type(self, joystick=None):
         if joystick: self.control_type = joystick
@@ -64,7 +65,7 @@ class InputManager:
 
     def get_input(self, events):
 
-        print(self.control_type)
+        self.mouse_pos = vec2(pygame.mouse.get_pos())
 
         for event in events:
 
@@ -80,7 +81,6 @@ class InputManager:
                 for action, value in KEY_MAP.items():
                     if val in value:
                         ACTIONS[action] = 1 
-
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.update_control_type()
