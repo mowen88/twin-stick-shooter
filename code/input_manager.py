@@ -68,8 +68,6 @@ class InputManager:
 
     def get_input(self, events):
 
-        print(self.bind_mode)
-
         for event in events:
 
             if event.type == pygame.QUIT:
@@ -144,6 +142,7 @@ class InputManager:
                             ACTIONS[action] = 1 
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    print(event.button)
                     if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
                     
                     for action, value in KEY_MAP.items():

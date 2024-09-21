@@ -74,7 +74,7 @@ AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right T
 
 BUTTON_NAMES = {
 	'Mouse':
-		{1:'Left Click',2:'Scroll Click',3:'Right Click',4:'Scroll Up',5:'Scroll Down'},
+		{1:'Left Click',2:'Scroll Btn',3:'Right Click',4:'Scroll Up',5:'Scroll Down',6:'Side Btn 1',7:'Side Btn 2'},
     'Nintendo Switch Pro Controller': 
     	{0:'A', 1:'B', 2:'X', 3:'Y', 4:'-', 5:'Home', 6:'+', 7:'L Stick In', 8:'R Stick In', 9:'L', 20:'ZL',
         10:'R', 11:'Up', 12:'Down', 13:'Left', 14:'Right', 15:'Capture', 21:'ZR'},

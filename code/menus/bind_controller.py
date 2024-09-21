@@ -55,21 +55,19 @@ class BindController(BaseMenu):
 	            text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['black']), 5)
 	            self.instantiate_images = False
 
-	        if self.game.input.new_bind[self.joystick_name] != -1:
+	        if self.game.input.new_bind[self.joystick_name] != -1: # must be -1 as 0 is used for a button id, unlike the keys
 	            new_button = self.game.input.new_bind[self.joystick_name]
 	            current_action = self.selection
 	            print(new_button)
 	            
 	            for action, button_id in BUTTON_MAPS[self.joystick_name].items(): # check for duplicates
-	                if button_id == new_button and action != current_action and action not in ['OK', 'Back']:
-
+	                if button_id == new_button and action != current_action and action not in ['OK','Back']:
 	                    BUTTON_MAPS[self.joystick_name][action] = BUTTON_MAPS[self.joystick_name][current_action]
 	                    break
 
 	            BUTTON_MAPS[self.joystick_name][current_action] = new_button # assign new button to action
 
-	            for action in ACTIONS:
-	                ACTIONS[action] = 0
+	            self.reset_actions()
 
 	            self.scene.menu = BindController(self.game, self.scene, self.index)
 
@@ -88,8 +86,7 @@ class BindController(BaseMenu):
 				self.game.input.bind_mode = True
 				self.instantiate_images = True
 
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
 
 		elif ACTIONS['Back'] and not self.game.input.bind_mode or not self.game.input.joystick:
 			if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
@@ -98,5 +95,4 @@ class BindController(BaseMenu):
 			else:
 				self.scene.menu = Options(self.game, self.scene)
 
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()

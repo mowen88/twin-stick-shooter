@@ -20,6 +20,10 @@ class BaseMenu:
 		self.menu_cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
+	def reset_actions(self):
+		for action in ACTIONS:
+			ACTIONS[action] = 0
+
 	def get_mouse_cursor(self, cursor_type):
 	   	if not self.game.input.joystick:
 	   		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.image.load(f'../assets/particles/{cursor_type}.png'), 7)

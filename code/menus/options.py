@@ -37,16 +37,14 @@ class Options(BaseMenu):
 					from menus.bind_keyboard import BindKeyboard
 					self.scene.menu = BindKeyboard(self.game, self.scene)
 
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
 
 		elif ACTIONS['Back']:
 			if hasattr(self.scene, 'paused'):
 				self.scene.menu = Pause(self.game, self.scene)
 			else:
 				self.scene.menu = MainMenu(self.game, self.scene)
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
 
 class Audio(BaseMenu):
 	def __init__(self, game, scene):
@@ -71,13 +69,27 @@ class Audio(BaseMenu):
 				else:
 					self.scene.menu = Options(self.game, self.scene)
 
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
 
 		elif ACTIONS['Back']:
 			self.scene.menu = Options(self.game, self.scene)
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
+
+class Credits(BaseMenu):
+	def __init__(self, game, scene):
+		super().__init__(game, scene)
+
+		self.title = 'Credits'
+		self.element_list = ['']
+		self.menu_sprites = pygame.sprite.Group()
+		self.elements = self.get_elements()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
+
+	def next_scene(self):
+		if ACTIONS['OK']:
+			self.scene.menu = MainMenu(self.game, self.scene)
+			self.reset_actions()
+
 
 
 

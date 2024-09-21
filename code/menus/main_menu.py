@@ -24,11 +24,13 @@ class MainMenu(BaseMenu):
 			elif self.selection == 'Options':
 				from menus.options import Options
 				self.scene.menu = Options(self.game, self.scene)
+			elif self.selection == 'Credits':
+				from menus.options import Credits
+				self.scene.menu = Credits(self.game, self.scene)
 			else:
 				self.game.quit()
 			# ACTIONS['OK'] = 0
 			# ACTIONS['Pause'] = 0
-			for action in ACTIONS:
-				ACTIONS[action] = 0
+			self.reset_actions()
 
-		
+
