@@ -1,5 +1,6 @@
 import pygame, math
 from pygame.math import Vector2 as vec2
+from entities import Entity
 from settings import *
 
 class InputManager:
@@ -13,6 +14,7 @@ class InputManager:
         self.bind_mode = False
         self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
         self.mouse_pos = vec2()
+        pygame.mouse.set_visible(False)
 
     def update_control_type(self):
         self.control_type = self.joystick.get_name() if self.joystick is not None else'Keyboard'
@@ -64,16 +66,13 @@ class InputManager:
 
     def get_input(self, events):
 
-
-        print(self.control_type)
-
         for event in events:
 
             if event.type == pygame.QUIT:
                 self.game.quit()
 
             if self.joystick:
-
+                
                 if event.type == pygame.JOYDEVICEREMOVED:
                     self.remove_joystick()
 
@@ -124,8 +123,11 @@ class InputManager:
                 self.get_triggers()
 
             else:
-                self.mouse_pos = vec2(pygame.mouse.get_pos())
+                self.mouse_pos = pygame.mouse.get_pos()
 
+                if event.type == pygame.JOYDEVICEADDED:
+                    self.add_joystick(event.device_index)
+                    self.cursor_pos = vec2()
 
                 if event.type == pygame.MOUSEWHEEL:
                     if event.y > 0: val = 4
@@ -161,7 +163,6 @@ class InputManager:
                         if event.key in value:
                             ACTIONS[action] = 0
 
-                if event.type == pygame.JOYDEVICEADDED:
-                    self.add_joystick(event.device_index)
+                
 
                 

@@ -8,13 +8,13 @@ class MainMenu(BaseMenu):
 
 		self.menu_sprites.empty()
 		self.title = 'Main Menu'
-		self.element_list = ['Start Game','Options','Quit']
+		self.element_list = ['Start Game','Options', 'Credits','Quit']
 		self.index = 0
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
-		self.mouse_cursor = self.get_mouse_cursor()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
@@ -30,3 +30,5 @@ class MainMenu(BaseMenu):
 			# ACTIONS['Pause'] = 0
 			for action in ACTIONS:
 				ACTIONS[action] = 0
+
+		

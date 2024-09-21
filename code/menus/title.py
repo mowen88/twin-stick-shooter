@@ -16,8 +16,9 @@ class BoxParticle(pygame.sprite.Sprite):
 		self.image.fill(colour)
 		self.rect = self.image.get_frect(topleft = pos)
 		self.alpha = 255
-		self.direction = pygame.math.Vector2(random.uniform(0.1, 1.0), random.uniform(0.1, 1.0))
-		self.speed = 20
+		self.random_float = random.uniform(0.1, 1.0)
+		self.direction = pygame.math.Vector2(self.random_float, self.random_float)
+		self.speed = 15
 		self.vel = self.direction * self.speed
 
 	def update(self, dt):

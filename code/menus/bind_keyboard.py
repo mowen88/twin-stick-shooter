@@ -18,6 +18,7 @@ class BindKeyboard(BaseMenu):
 		self.elements = self.get_elements('midleft',220)
 		self.bindings = self.get_bindings('midright')
 		self.cursors = self.get_cursors()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 		
 	def get_bindings(self, alignment='center'):

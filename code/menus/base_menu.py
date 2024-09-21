@@ -17,12 +17,13 @@ class BaseMenu:
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
-		self.mouse_cursor = self.get_mouse_cursor()
+		self.menu_cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
-	def get_mouse_cursor(self):
-		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.Surface((10,10)), 6)
-		return cursor
+	def get_mouse_cursor(self, cursor_type):
+	   	if not self.game.input.joystick:
+	   		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.image.load(f'../assets/particles/{cursor_type}.png'), 7)
+	   		return cursor
 
 	def get_cursors(self):
 		cursors = []
@@ -32,8 +33,7 @@ class BaseMenu:
 		return cursors
 
 	def get_elements(self, alignment='center', panel_width=144):
-
-		# panel_surface = pygame.image.load('../assets/misc_images/menu_panel.png') 
+ 
 		panel_surface = pygame.Surface((panel_width, HEIGHT))
 		panel_surface.fill((COLOURS['black']))
 		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, 3)
@@ -46,7 +46,6 @@ class BaseMenu:
 	
 		start_y = TILESIZE * 4
 		line_spacing = TILESIZE
-
 		for option in self.element_list:
 			offset += line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan'])
@@ -61,14 +60,21 @@ class BaseMenu:
 		return elements
 
 	def mouse_navigation(self):
+
 		prev_index = self.index
 		for index, element in enumerate(self.elements):
-			element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y, self.panel_element.rect.width, element.rect.height)
+			element_rect = pygame.Rect(element.rect.inflate(self.panel_element.rect.width, 4))#self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
 			if element_rect.collidepoint(self.game.input.mouse_pos):
 				self.index = index
+				if self.alpha == 255 and not self.game.block_input and ACTIONS['Left Click']:
+					ACTIONS['OK'] = 1
+					print(ACTIONS['OK'])
+
 		if self.index != prev_index:
 			for cursor in self.cursors:
 				cursor.frame_index = 0
+
+
 
 	def navigate(self):
 
@@ -77,7 +83,8 @@ class BaseMenu:
 
 		if self.alpha == 255 and not self.game.block_input:
 			self.next_scene()
-			self.mouse_navigation()
+			if not self.game.input.joystick:
+				self.mouse_navigation()
 
 			if not self.navigation_timer.running and not self.game.input.bind_mode:
 				if ACTIONS['Menu Down'] or ACTIONS['Menu Up'] or abs(AXIS_PRESSED['Left Stick'][1]) > 0:
@@ -99,6 +106,7 @@ class BaseMenu:
 		self.cursors[1].rect.midright = self.panel_element.rect.right, self.elements[self.index].rect.centery
 		self.selection = self.element_list[self.index]
 
+
 	def fade_in(self, speed):
 		self.alpha += speed
 		if self.alpha >= 255:
@@ -117,9 +125,11 @@ class BaseMenu:
 		self.navigate()
 		self.navigation_timer.update(dt)
 		self.menu_sprites.update(dt)
-		self.mouse_cursor.rect.center = self.game.input.mouse_pos
 
 	def draw(self, screen):
+		self.cursor.rect.center = self.game.input.mouse_pos
 		sorted_sprites = sorted(self.menu_sprites, key=lambda sprite: sprite.z)
 		for sprite in sorted_sprites:
 			screen.blit(sprite.image, sprite.rect)
+
+

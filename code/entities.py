@@ -12,12 +12,13 @@ class Entity(pygame.sprite.Sprite):
 
     def get_pos(self, pos, alignment):
         rect_methods = {
+            'topleft': self.image.get_rect(topleft=pos),
+            'topright': self.image.get_rect(topright=pos),
             'midleft': self.image.get_rect(midleft=pos),
             'midright': self.image.get_rect(midright=pos),
             'midtop': self.image.get_rect(midtop=pos),
         }
         return rect_methods.get(alignment, self.image.get_rect(center=pos))
-
 
 class AnimatedEntity(pygame.sprite.Sprite):
     def __init__(self, groups, pos, speed, path, z=1):

@@ -18,6 +18,7 @@ class BindController(BaseMenu):
 		self.elements = self.get_elements('midleft',220)
 		self.bindings = self.get_bindings('midright')
 		self.cursors = self.get_cursors()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 		
 	def get_bindings(self, alignment='center'):
@@ -31,10 +32,9 @@ class BindController(BaseMenu):
 		for option in self.element_list:
 			if option != 'Back':
 				offset += line_spacing
-				for action, key in KEY_MAP.items():
+				for action, button_id in BUTTON_MAPS[self.game.input.joystick_name].items():
 					if action == option:
-						name = BUTTON_NAMES['Mouse'][key[0]] if key[0] <= 7 else pygame.key.name(key[0])
-
+						name = BUTTON_NAMES[self.game.input.joystick_name][button_id]
 						surface = self.game.font.render(name, False, COLOURS['white'])
 						pos = self.panel_element.rect.right - TILESIZE * 1.5, start_y + offset
 						element = Entity([self.menu_sprites], pos, surface, 3, alignment)

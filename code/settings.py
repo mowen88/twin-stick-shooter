@@ -30,14 +30,14 @@ TRIGGER_DEADZONE = 0.5
 KEY_MAP = {
 			'Left':[pygame.K_LEFT], 'Right':[pygame.K_RIGHT], 'Up':[pygame.K_UP], 'Down':[pygame.K_DOWN],
 			'Attack':[pygame.K_z], 'Dash':[pygame.K_x], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
-			'OK':[pygame.K_SPACE, pygame.K_RETURN, 1], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
+			'Left Click':[1],'OK':[pygame.K_SPACE, pygame.K_RETURN], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
 			'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
 			'Menu Left':[pygame.K_LEFT, pygame.K_a], 'Menu Right':[pygame.K_RIGHT, pygame.K_d]
 			}
 
 
 ACTIONS = {'Menu Up':0, 'Menu Down':0, 'Menu Left':0, 'Menu Right':0, 'Up':0, 'Down':0, 'Left':0, 'Right':0,
-			'Attack':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'OK':0, 'Back':0}
+			'Attack':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'OK':0, 'Back':0,'Left Click':0}
 
                   
 BUTTON_MAPS = {

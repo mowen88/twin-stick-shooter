@@ -17,11 +17,17 @@ class Scene(State):
         self.drawn_sprites.empty()
         self.paused = False
         self.bg_colour = COLOURS['grey']
+        self.crosshair_pos = RES/2
+        self.crosshair = self.get_crosshair('game_cursor')
         self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (HALF_WIDTH, HALF_HEIGHT), 'characters/player', z=3)
         self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 250)
         self.menu = Pause(self.game, self)
-        #ACTIONS['Pause'] = 0 # if hold pause while fading in, pause menu does not activate, only when explicitly pressed
-  
+
+    def get_crosshair(self, cursor_type):
+        pos = pygame.mouse.get_pos() if not self.game.input.joystick else self.crosshair_pos
+        cursor = Entity([self.drawn_sprites], pos, pygame.image.load(f'../assets/particles/{cursor_type}.png'), 7)
+        return cursor
+
     def next_scene(self):
         #from menus.options import Options
         self.exit_state()
@@ -36,12 +42,15 @@ class Scene(State):
         events.get_input()
 
     def update(self, dt):
+        
         # if ACTIONS['Back']:
         #     self.transition.on_complete = [self.next_scene]
         #     ACTIONS['Back'] = 0
         if self.paused:
+            self.crosshair.rect.topleft = RES
             self.menu.update(dt)
         else:
+            self.crosshair.rect.center = pygame.mouse.get_pos()
             self.update_sprites.update(dt)
 
         if not self.game.block_input:
@@ -54,6 +63,8 @@ class Scene(State):
                 ACTIONS['Pause'] = 0
                 ACTIONS['OK'] = 0
                 self.menu.alpha = 0
+
+
 
         # if self.quit_to_menu:
         #     self.paused = False

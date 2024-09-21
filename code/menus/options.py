@@ -15,6 +15,7 @@ class Options(BaseMenu):
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
@@ -53,6 +54,7 @@ class Audio(BaseMenu):
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements('midleft',180)
 		self.cursors = self.get_cursors()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
@@ -83,6 +85,7 @@ class Controls(BaseMenu):
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
 		self.cursors = self.get_cursors()
+		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
