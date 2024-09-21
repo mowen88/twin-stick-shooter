@@ -26,7 +26,7 @@ class Game:
 
     def quit(self):
         self.running = False
-        pygame.quit()
+        pygame.quit() 
         sys.exit()
 
     def get_input(self):

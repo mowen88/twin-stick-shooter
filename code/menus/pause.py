@@ -31,8 +31,13 @@ class Pause(BaseMenu):
 				ACTIONS[action] = 0
 
 		elif ACTIONS['OK'] and self.selection == 'Controls':
-			from menus.options import Controls
-			self.scene.menu = Controls(self.game, self.scene)
+			if self.game.input.joystick:
+				from menus.bind_controller import BindController
+				self.scene.menu = BindController(self.game, self.scene)
+			else:
+				from menus.bind_keyboard import BindKeyboard
+				self.scene.menu = BindKeyboard(self.game, self.scene)
+				
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 

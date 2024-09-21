@@ -58,22 +58,20 @@ class BindKeyboard(BaseMenu):
 	            new_key = self.game.input.new_bind['Keyboard']
 	            current_action = self.selection
   
-	            for action, key in KEY_MAP.items(): # Check for duplicates
+	            for action, key in KEY_MAP.items(): # check for duplicates
 	                if key[0] == new_key and action != current_action:
 	                    # Swap keys
 	                    KEY_MAP[action] = KEY_MAP[current_action]
 	                    break
 
-	            KEY_MAP[current_action] = [new_key] # Assign new key to the action
+	            KEY_MAP[current_action] = [new_key] # assign new key to the action
 
 	            for action in ACTIONS:
 	                ACTIONS[action] = 0
 
 	            self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
 
-
 	def next_scene(self):
-
 		self.bind_mode()
 
 		if ACTIONS['OK'] and not self.game.input.bind_mode:
@@ -83,14 +81,19 @@ class BindKeyboard(BaseMenu):
 					self.scene.menu = Pause(self.game, self.scene)
 				else:
 					self.scene.menu = Options(self.game, self.scene)
-			else:
+
+			elif not self.game.input.joystick:
 				self.game.input.bind_mode = True
 				self.instantiate_images = True
 
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
-		elif ACTIONS['Back']:
-			self.scene.menu = Options(self.game, self.scene)
+		elif ACTIONS['Back'] and not self.game.input.bind_mode or self.game.input.joystick:
+			if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
+				from menus.pause import Pause
+				self.scene.menu = Pause(self.game, self.scene)
+			else:
+				self.scene.menu = Options(self.game, self.scene)
 			for action in ACTIONS:
 				ACTIONS[action] = 0

@@ -63,7 +63,7 @@ class BaseMenu:
 
 		prev_index = self.index
 		for index, element in enumerate(self.elements):
-			element_rect = pygame.Rect(element.rect.inflate(self.panel_element.rect.width, 4))#self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
+			element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
 			if element_rect.collidepoint(self.game.input.mouse_pos):
 				self.index = index
 				if self.alpha == 255 and not self.game.block_input and ACTIONS['Left Click']:
@@ -73,8 +73,6 @@ class BaseMenu:
 		if self.index != prev_index:
 			for cursor in self.cursors:
 				cursor.frame_index = 0
-
-
 
 	def navigate(self):
 
@@ -121,13 +119,16 @@ class BaseMenu:
 		pass
 
 	def update(self, dt):
+
 		self.fade_in(1500 * dt)
 		self.navigate()
 		self.navigation_timer.update(dt)
 		self.menu_sprites.update(dt)
 
+		if self.cursor:
+			self.cursor.rect.center = self.game.input.mouse_pos
+
 	def draw(self, screen):
-		self.cursor.rect.center = self.game.input.mouse_pos
 		sorted_sprites = sorted(self.menu_sprites, key=lambda sprite: sprite.z)
 		for sprite in sorted_sprites:
 			screen.blit(sprite.image, sprite.rect)

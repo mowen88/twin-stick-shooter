@@ -12,7 +12,7 @@ class InputManager:
         self.control_type = self.update_control_type()
         self.axis_flags = AXIS_PRESSED.copy()
         self.bind_mode = False
-        self.new_bind = {'Keyboard':0,'Xbox 360 Controller':0}
+        self.new_bind = {'Keyboard':0,'Xbox 360 Controller':-1,'DualSense Wireless Controller':-1}
         self.mouse_pos = vec2()
         pygame.mouse.set_visible(False)
 
@@ -40,7 +40,7 @@ class InputManager:
 
     def get_triggers(self):
 
-        if not (self.game.block_input or self.bind_mode):
+        if not self.game.block_input:
         
             triggers = {'Left Trigger': 20, 'Right Trigger': 21}
             button_map = BUTTON_MAPS[self.joystick_name]
@@ -49,9 +49,10 @@ class InputManager:
                 # Get the current trigger value (from axis)
                 current_value = AXIS_PRESSED[trigger]
                 new_trigger_value = 1 if current_value > TRIGGER_DEADZONE else 0
-
                 # Trigger pressed logic
                 if self.axis_flags[trigger] == 0 and new_trigger_value == 1:
+                    if self.bind_mode: self.new_bind[self.joystick_name] = trigger_id
+
                     for action, value in button_map.items():
                         if trigger_id == value:
                             ACTIONS[action] = 1
@@ -64,7 +65,10 @@ class InputManager:
 
                 self.axis_flags[trigger] = new_trigger_value
 
+
     def get_input(self, events):
+
+        print(self.bind_mode)
 
         for event in events:
 
@@ -79,6 +83,7 @@ class InputManager:
                 button_map = BUTTON_MAPS[self.joystick_name]
 
                 if event.type == pygame.JOYBUTTONDOWN:
+                    if self.bind_mode: self.new_bind[self.joystick_name] = event.button
                     #self.new_bind = self.update_binding(event.button, guid)
                     for action, value in button_map.items():
                         if value == event.button:

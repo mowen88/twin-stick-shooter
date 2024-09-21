@@ -7,10 +7,11 @@ class BindController(BaseMenu):
 	def __init__(self, game, scene, index=0):
 		super().__init__(game, scene)
 
+		self.joystick_name = self.game.input.joystick_name
 		self.game.input.bind_mode = False
-		self.game.input.new_bind['Keyboard'] = 0
+		self.game.input.new_bind[self.game.input.joystick_name] = -1
 		self.instantiate_images = False
-		self.title = 'Keyboard Controls'
+		self.title = f'{self.game.input.joystick_name}'
 		self.element_list = ['Attack', 'Dash', 'Inventory', 'Pause', 'Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
@@ -32,9 +33,10 @@ class BindController(BaseMenu):
 		for option in self.element_list:
 			if option != 'Back':
 				offset += line_spacing
-				for action, button_id in BUTTON_MAPS[self.game.input.joystick_name].items():
+				for action, button_id in BUTTON_MAPS[self.joystick_name].items():
 					if action == option:
-						name = BUTTON_NAMES[self.game.input.joystick_name][button_id]
+						name = BUTTON_NAMES[self.joystick_name][button_id]
+
 						surface = self.game.font.render(name, False, COLOURS['white'])
 						pos = self.panel_element.rect.right - TILESIZE * 1.5, start_y + offset
 						element = Entity([self.menu_sprites], pos, surface, 3, alignment)
@@ -53,25 +55,25 @@ class BindController(BaseMenu):
 	            text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['black']), 5)
 	            self.instantiate_images = False
 
-	        if self.game.input.new_bind['Keyboard'] != 0:
-	            new_key = self.game.input.new_bind['Keyboard']
+	        if self.game.input.new_bind[self.joystick_name] != -1:
+	            new_button = self.game.input.new_bind[self.joystick_name]
 	            current_action = self.selection
+	            print(new_button)
+	            
+	            for action, button_id in BUTTON_MAPS[self.joystick_name].items(): # check for duplicates
+	                if button_id == new_button and action != current_action and action not in ['OK', 'Back']:
 
-	            for action, key in KEY_MAP.items(): # Check for duplicates
-	                if key[0] == new_key and action != current_action:
-	                    # Swap keys
-	                    KEY_MAP[action] = KEY_MAP[current_action]
+	                    BUTTON_MAPS[self.joystick_name][action] = BUTTON_MAPS[self.joystick_name][current_action]
 	                    break
 
-	            KEY_MAP[current_action] = [new_key] # Assign new key to the action
-  
+	            BUTTON_MAPS[self.joystick_name][current_action] = new_button # assign new button to action
+
 	            for action in ACTIONS:
 	                ACTIONS[action] = 0
 
-	            self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
+	            self.scene.menu = BindController(self.game, self.scene, self.index)
 
 	def next_scene(self):
-
 		self.bind_mode()
 
 		if ACTIONS['OK'] and not self.game.input.bind_mode:
@@ -81,14 +83,20 @@ class BindController(BaseMenu):
 					self.scene.menu = Pause(self.game, self.scene)
 				else:
 					self.scene.menu = Options(self.game, self.scene)
-			else:
+					
+			elif self.game.input.joystick:
 				self.game.input.bind_mode = True
 				self.instantiate_images = True
 
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
-		elif ACTIONS['Back']:
-			self.scene.menu = Options(self.game, self.scene)
+		elif ACTIONS['Back'] and not self.game.input.bind_mode or not self.game.input.joystick:
+			if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
+				from menus.pause import Pause
+				self.scene.menu = Pause(self.game, self.scene)
+			else:
+				self.scene.menu = Options(self.game, self.scene)
+
 			for action in ACTIONS:
 				ACTIONS[action] = 0
