@@ -19,9 +19,10 @@ FONT = '../assets/font/BMSPA___.ttf'
 #FONT = '../assets/homespun.ttf'
 
 COLOURS = {
-			'purple':(69,41,63), 'cyan':(143,248,226), 'black':(46,34,47), 'white':(255,255,255), 'green':(0,255,0), 'pale_yellow':(201,204,161),
-			'yellow':(202,160,90),'orange':(174,106,71), 'red':(139,64,73), 'burgundy':(84,51,68), 'grey':(81,82,98),'green':(99,120,125),
-			'pale_green':(142,160,145), 'brown':(110,39,39), 'salmon':(158,69,57)
+			'purple':(69,41,63), 'cyan':(143,248,226), 'black':(46,34,47), 'white':(255,255,255), 'olive':(49,54,56),'pale_yellow':(201,204,161),
+			'yellow':(202,160,90),'orange':(174,106,71), 'deep_red':(110,39,39), 'red':(179,56,49), 'burgundy':(84,51,68), 'grey':(81,82,98),'green':(22,90,76),
+			'pale_green':(142,160,145), 'brown':(110,39,39), 'salmon':(158,69,57), 'dark_pink':(122,48,69), 'lavender':(107,62,117), 'blue':(72,74,119),
+			'deep_blue':(50,51,83), 'teal':(11,138,143), 'hot_pink':(240,79,120)
 			}
 
 DEADZONE = 0.2
@@ -29,7 +30,7 @@ TRIGGER_DEADZONE = 0.5
 
 KEY_MAP = {
 			'Left':[pygame.K_LEFT], 'Right':[pygame.K_RIGHT], 'Up':[pygame.K_UP], 'Down':[pygame.K_DOWN],
-			'Attack':[pygame.K_z], 'Dash':[pygame.K_x], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
+			'Attack':[pygame.K_z], 'Shoot':[pygame.K_x], 'Dash':[pygame.K_c], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
 			'Left Click':[1],'Confirm':[pygame.K_SPACE, pygame.K_RETURN], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
 			'Reset Defaults':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
 			'Menu Left':[pygame.K_LEFT, pygame.K_a], 'Menu Right':[pygame.K_RIGHT, pygame.K_d]
@@ -37,52 +38,51 @@ KEY_MAP = {
 
 DEFAULT_KEY_MAP = {
 			'Left':[pygame.K_LEFT], 'Right':[pygame.K_RIGHT], 'Up':[pygame.K_UP], 'Down':[pygame.K_DOWN],
-			'Attack':[pygame.K_z], 'Dash':[pygame.K_x], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
+			'Attack':[pygame.K_z], 'Shoot':[pygame.K_x], 'Dash':[pygame.K_c], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
 			'Left Click':[1],'Confirm':[pygame.K_SPACE, pygame.K_RETURN], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
 			'Reset Defaults':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
 			'Menu Left':[pygame.K_LEFT, pygame.K_a], 'Menu Right':[pygame.K_RIGHT, pygame.K_d]
 			}
 
 ACTIONS = {'Menu Up':0, 'Menu Down':0, 'Menu Left':0, 'Menu Right':0, 'Up':0, 'Down':0, 'Left':0, 'Right':0,
-			'Attack':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'Confirm':0, 'Back':0,'Left Click':0,'Reset Defaults':0}
+			'Attack':0, 'Shoot':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'Confirm':0, 'Back':0,'Left Click':0,'Reset Defaults':0}
 
                   
 BUTTON_MAPS = {
 			'Mouse':
-				{'Attack':1, 'Dash':0, 'Inventory':0, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
 				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
-				{'Attack':0, 'Dash':1, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':1, 'Shoot':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
 			'PS4 Controller':
-				{'Attack':0, 'Dash':0, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
 			'Xbox 360 Controller':
-				{'Attack':	0, 'Dash':1, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			'DualSense Wireless Controller':
-				{'Attack':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			}
 
 DEFAULT_BUTTON_MAPS = {
 			'Mouse':
-				{'Attack':1, 'Dash':0, 'Inventory':0, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
 				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
-				{'Attack':0, 'Dash':1, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':1, 'Shoot':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
 			'PS4 Controller':
-				{'Attack':0, 'Dash':0, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
 			'Xbox 360 Controller':
-				{'Attack':	0, 'Dash':1, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			'DualSense Wireless Controller':
-				{'Attack':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
+				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
 				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			}
-
 
 AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right Trigger':0, 'D-Pad':(0,0)}
 

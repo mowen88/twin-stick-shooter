@@ -18,7 +18,7 @@ class BaseMenu:
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
-		self.key_button_prompts = self.get_key_button_prompts(['Confirm'])
+		self.button_prompts = self.get_button_prompts(['Confirm'])
 		self.cursors = self.get_cursors()
 		self.menu_cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
@@ -39,7 +39,7 @@ class BaseMenu:
 			cursors.append(obj)
 		return cursors
 
-	def get_key_button_prompts(self, prompts):
+	def get_button_prompts(self, prompts):
 		offset = 0
 		for prompt in prompts:
 			if self.game.input.joystick:
@@ -61,12 +61,11 @@ class BaseMenu:
 		self.panel_element.image.fill((0,0,0))
 
 		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'])
-		title_element = Entity([self.menu_sprites], (self.panel_element.rect.centerx, self.panel_element.rect.top + TILESIZE*2), title_surface, 3)
+		title_element = Entity([self.menu_sprites], (self.panel_element.rect.centerx, self.start_y - TILESIZE*0.5), title_surface, 3)
 		
 		elements = []
 		offset = 0
 	
-		
 		for option in self.element_list:
 			offset += self.line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan']).convert_alpha()

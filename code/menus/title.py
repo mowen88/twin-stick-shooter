@@ -7,30 +7,34 @@ from timer import Timer
 from menus.base_menu import BaseMenu
 from menus.main_menu import MainMenu
 
-class BoxParticle(pygame.sprite.Sprite):
-	def __init__(self, groups, pos, colour, surf, z=1, alignment='topleft'):
-		super().__init__(groups)
+class SmokeParticle(pygame.sprite.Sprite):
+    def __init__(self, groups, pos, colour, radius, z=1, alignment='topleft'):
+        super().__init__(groups)
+  
+        self.z = z
+        self.image = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
+        pygame.draw.circle(self.image, colour, (radius, radius), radius)
+        self.rect = self.image.get_frect(topleft=pos)
+        self.alpha = 255
+        self.random_float = random.uniform(0.1, 1.0)
+        self.direction = pygame.math.Vector2(self.random_float, self.random_float)
+        self.speed = 15
+        self.vel = self.direction * self.speed
 
-		self.image = surf
-		self.z = z
-		self.image.fill(colour)
-		self.rect = self.image.get_frect(topleft = pos)
-		self.alpha = 255
-		self.random_float = random.uniform(0.1, 1.0)
-		self.direction = pygame.math.Vector2(self.random_float, self.random_float)
-		self.speed = 15
-		self.vel = self.direction * self.speed
+    def update(self, dt):
+        self.alpha = random.randrange(50, 200)
 
-	def update(self, dt):
-		self.alpha = random.randrange(0, 255)
-		self.rect.topleft += self.vel * dt
+        self.rect.topleft += self.vel * dt
 
-		if self.rect.x > WIDTH:
-			self.rect.x = -self.rect.width
-		if self.rect.y > HEIGHT:
-			self.rect.y = -self.rect.height
+        if self.rect.x > WIDTH:
+            self.rect.x = -self.rect.width
+        if self.rect.y > HEIGHT:
+            self.rect.y = -self.rect.height
 
-		self.image.set_alpha(self.alpha)
+        # Apply alpha to the image
+        self.image.set_alpha(self.alpha)
+
+
 
 class TitleScene(State):
 	def __init__(self, game):
@@ -41,14 +45,14 @@ class TitleScene(State):
 		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 1000)
 
 	def get_bg_particles(self):
-		boxes = []
-		for x in range(int(RES.magnitude())):
+		circles = []
+		for x in range(int(RES.magnitude())*2):
 			pos = (random.random() * WIDTH, random.random() * HEIGHT)
-			size = (random.random()*TILESIZE*0.5, random.random()*TILESIZE*0.5)
-			surf = pygame.Surface(size)
-			colour = random.choice([COLOURS['brown'], COLOURS['salmon']])
-			boxes.append(BoxParticle([self.update_sprites, self.drawn_sprites], pos, colour, surf, z=1))
-		return boxes
+			radius = random.random()*TILESIZE*0.75
+			#colour = random.choice([COLOURS['deep_red'], COLOURS['red']])
+			colour = COLOURS['blue']
+			circles.append(SmokeParticle([self.update_sprites, self.drawn_sprites], pos, colour, radius, z=1))
+		return circles
 
 	def next_scene(self):
 		from scene import Scene
@@ -60,7 +64,7 @@ class TitleScene(State):
 
 	def draw(self, screen):
 
-		screen.fill(COLOURS['purple'])
+		screen.fill(COLOURS['deep_blue'])
 
 		sorted_sprites = sorted(self.drawn_sprites, key=lambda sprite: sprite.z)
 		for sprite in sorted_sprites:

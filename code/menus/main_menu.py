@@ -7,13 +7,13 @@ class MainMenu(BaseMenu):
 		super().__init__(game, scene)
 
 		self.menu_sprites.empty()
-		self.title = 'Main Menu'
+		self.title = 'MAIN MENU'
 		self.element_list = ['Start Game','Options', 'Credits','Quit']
 		self.index = 0
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
-		self.key_button_prompts = self.get_key_button_prompts(['Confirm'])
+		self.button_prompts = self.get_button_prompts(['Confirm'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0

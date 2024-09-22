@@ -8,13 +8,13 @@ class Options(BaseMenu):
 	def __init__(self, game, scene):
 		super().__init__(game, scene)
 
-		self.title = 'Options'
+		self.title = 'OPTIONS'
 		self.element_list = ['Audio', 'Controls', 'Back']
 		self.index = 0
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
-		self.key_button_prompts = self.get_key_button_prompts(['Confirm','Back'])
+		self.button_prompts = self.get_button_prompts(['Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
@@ -53,7 +53,7 @@ class Credits(BaseMenu):
 	def __init__(self, game, scene):
 		super().__init__(game, scene)
 
-		self.title = 'Credits'
+		self.title = 'CREDITS'
 		self.element_list = ['']
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
