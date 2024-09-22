@@ -14,12 +14,13 @@ class Options(BaseMenu):
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
+		self.key_button_prompts = self.get_key_button_prompts(['Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
-		if ACTIONS['OK']:
+		if ACTIONS['Confirm']:
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'):
 					self.scene.menu = Pause(self.game, self.scene)
@@ -61,7 +62,7 @@ class Audio(BaseMenu):
 		self.alpha = 0
 
 	def next_scene(self):
-		if ACTIONS['OK']:
+		if ACTIONS['Confirm']:
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
@@ -86,7 +87,7 @@ class Credits(BaseMenu):
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 
 	def next_scene(self):
-		if ACTIONS['OK']:
+		if ACTIONS['Confirm']:
 			self.scene.menu = MainMenu(self.game, self.scene)
 			self.reset_actions()
 

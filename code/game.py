@@ -12,7 +12,7 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
         self.font = pygame.font.Font(FONT, 9)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
@@ -40,9 +40,6 @@ class Game:
         else: rect = surf.get_rect(center = pos)
         self.screen.blit(surf, rect)
 
-    def event_handler(self, events):
-        self.input.get_input(events)
-
     def update(self, dt):
         self.stack[-1].update(dt)
  
@@ -53,10 +50,9 @@ class Game:
     def main_loop(self):
         dt = self.clock.tick()/1000
         events = pygame.event.get()
-        self.event_handler(events)
+        self.input.get_input(events)
         self.update(dt)
         self.draw(self.screen)
-
 
 if __name__ == "__main__":
     game = Game()

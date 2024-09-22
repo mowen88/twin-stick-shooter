@@ -61,7 +61,7 @@ class Scene(State):
                     sprite.frame_index = 0
                 #from menus.menu import BaseMenu
                 ACTIONS['Pause'] = 0
-                ACTIONS['OK'] = 0
+                ACTIONS['Confirm'] = 0
                 self.menu.alpha = 0
 
 

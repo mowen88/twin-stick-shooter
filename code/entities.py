@@ -14,6 +14,8 @@ class Entity(pygame.sprite.Sprite):
         rect_methods = {
             'topleft': self.image.get_rect(topleft=pos),
             'topright': self.image.get_rect(topright=pos),
+            'bottomleft': self.image.get_rect(bottomleft=pos),
+            'bottomright': self.image.get_rect(bottomright=pos),
             'midleft': self.image.get_rect(midleft=pos),
             'midright': self.image.get_rect(midright=pos),
             'midtop': self.image.get_rect(midtop=pos),

@@ -26,9 +26,9 @@ class Player(NPC):
             y_direction = 0
 
             if AXIS_PRESSED['Left Stick'][0]:
-                x_direction = AXIS_PRESSED['Left Stick'][0] 
+                x_direction = AXIS_PRESSED['Left Stick'][0]
             elif AXIS_PRESSED['D-Pad'][0]:
-                x_direction = AXIS_PRESSED['D-Pad'][0]
+                x_direction = AXIS_PRESSED['D-Pad'][0] 
             elif ACTIONS['Right']:
                 x_direction = ACTIONS['Right']
             elif ACTIONS['Left']:
@@ -37,8 +37,7 @@ class Player(NPC):
             if AXIS_PRESSED['Left Stick'][1]:
                 y_direction = AXIS_PRESSED['Left Stick'][1]
             elif AXIS_PRESSED['D-Pad'][1]:
-                y_direction = AXIS_PRESSED['D-Pad'][1] * -1
-                
+                y_direction = AXIS_PRESSED['D-Pad'][1]
             elif ACTIONS['Down']:
                 y_direction = ACTIONS['Down']
             elif ACTIONS['Up']:

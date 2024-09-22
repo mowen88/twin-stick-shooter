@@ -11,12 +11,14 @@ class BindKeyboard(BaseMenu):
 		self.game.input.new_bind['Keyboard'] = 0
 		self.instantiate_images = False
 		self.title = 'Keyboard Controls'
-		self.element_list = ['Attack', 'Dash', 'Inventory', 'Pause', 'Back']
+		self.start_y = TILESIZE * 2.5
+		self.element_list = ['Up','Down','Left','Right','Attack', 'Dash', 'Inventory', 'Pause', 'Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
-		self.elements = self.get_elements('midleft',220)
+		self.elements = self.get_elements('midleft',226)
 		self.bindings = self.get_bindings('midright')
+		self.key_button_prompts = self.get_key_button_prompts(['Default','Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
@@ -26,18 +28,17 @@ class BindKeyboard(BaseMenu):
 		elements = []
 		offset = 0
 	
-		start_y = TILESIZE * 4
 		line_spacing = TILESIZE
 
 		for option in self.element_list:
 			if option != 'Back':
-				offset += line_spacing
+				offset += self.line_spacing
 				for action, key in KEY_MAP.items():
 					if action == option:
 						name = BUTTON_NAMES['Mouse'][key[0]] if key[0] <= 7 else pygame.key.name(key[0])
 
 						surface = self.game.font.render(name, False, COLOURS['white'])
-						pos = self.panel_element.rect.right - TILESIZE * 1.5, start_y + offset
+						pos = self.panel_element.rect.right - TILESIZE * 1.5, self.start_y + offset
 						element = Entity([self.menu_sprites], pos, surface, 3, alignment)
 						elements.append(element)
 
@@ -47,7 +48,7 @@ class BindKeyboard(BaseMenu):
 	    if self.game.input.bind_mode:
 	        if self.instantiate_images:
 	            pos = (self.panel_element.rect.centerx, self.bindings[self.index].rect.centery)
-	            size = (self.panel_element.rect.width, 12)
+	            size = (self.panel_element.rect.width, 15)
 	            message = f'Press a key for {self.element_list[self.index]}'
 	            blank = Entity([self.menu_sprites], pos, pygame.Surface(size), 5)
 	            blank.image.fill(COLOURS['cyan'])
@@ -59,7 +60,7 @@ class BindKeyboard(BaseMenu):
 	            current_action = self.selection
   
 	            for action, key in KEY_MAP.items(): # check for duplicates
-	                if key[0] == new_key and action != current_action and action not in ['OK','Back','Left Click']:
+	                if key[0] == new_key and action != current_action and action in self.element_list:
 	                    # Swap keys
 	                    KEY_MAP[action] = KEY_MAP[current_action]
 	                    break
@@ -70,10 +71,14 @@ class BindKeyboard(BaseMenu):
 
 	            self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
 
+	def reset_defaults(self):
+		KEY_MAP.update(DEFAULT_KEY_MAP)
+		self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
+
 	def next_scene(self):
 		self.bind_mode()
 
-		if ACTIONS['OK'] and not self.game.input.bind_mode:
+		if ACTIONS['Confirm'] and not self.game.input.bind_mode:
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
@@ -94,3 +99,8 @@ class BindKeyboard(BaseMenu):
 			else:
 				self.scene.menu = Options(self.game, self.scene)
 			self.reset_actions()
+
+		elif ACTIONS['Default']:
+			self.reset_defaults()
+			self.reset_actions()
+			

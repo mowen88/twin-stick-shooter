@@ -13,12 +13,13 @@ class MainMenu(BaseMenu):
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
+		self.key_button_prompts = self.get_key_button_prompts(['Confirm'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
 
 	def next_scene(self):
-		if ACTIONS['OK']:
+		if ACTIONS['Confirm']:
 			if self.selection == 'Start Game':
 				self.scene.transition.on_complete = [self.scene.next_scene]
 			elif self.selection == 'Options':
@@ -29,7 +30,7 @@ class MainMenu(BaseMenu):
 				self.scene.menu = Credits(self.game, self.scene)
 			else:
 				self.game.quit()
-			# ACTIONS['OK'] = 0
+			# ACTIONS['Confirm'] = 0
 			# ACTIONS['Pause'] = 0
 			self.reset_actions()
 

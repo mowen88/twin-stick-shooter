@@ -12,7 +12,7 @@ class InputManager:
         self.control_type = self.update_control_type()
         self.axis_flags = AXIS_PRESSED.copy()
         self.bind_mode = False
-        self.new_bind = {'Keyboard':0,'Xbox 360 Controller':-1,'DualSense Wireless Controller':-1}
+        self.new_bind = {'Keyboard':0,'Xbox 360 Controller':-1,'PS4 Controller':-1,'DualSense Wireless Controller':-1,'Nintendo Switch Pro Controller':-1}
         self.mouse_pos = vec2()
         pygame.mouse.set_visible(False)
 
@@ -33,10 +33,40 @@ class InputManager:
         self.update_control_type()
         AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right Trigger':0, 'D-Pad':(0,0)}
 
-    def get_hats(self):
+    # def get_hats(self):
+    #     if not self.game.block_input:
 
-        if not (self.game.block_input or self.bind_mode) and self.joystick:
-          pass
+    #         hat_mappings = {'Left':}
+
+    #         hat_mappings = {(0, 1): 11,(0, -1): 12,(-1, 0): 13,(1, 0): 14}
+
+    #         button_map = BUTTON_MAPS[self.joystick_name]
+
+    #         # Get current D-pad state
+    #         dpad_state = AXIS_PRESSED['D-Pad']
+
+    #         # Iterate over the hat mappings (Up, Down, Left, Right)
+    #         for direction, button_id in hat_mappings.items():
+    #             new_value = 1 if dpad_state == direction else 0
+
+    #             # Hat pressed logic
+    #             if self.axis_flags['D-Pad'] != direction and new_value == 1:
+    #                 if self.bind_mode:
+    #                     self.new_bind[self.joystick_name] = button_id
+
+    #                 for action, value in button_map.items():
+    #                     if button_id == value:
+    #                         ACTIONS[action] = 1
+
+    #             # Hat released logic
+    #             if self.axis_flags['D-Pad'] == direction and new_value == 0:
+    #                 for action, value in button_map.items():
+    #                     if button_id == value:
+    #                         ACTIONS[action] = 0
+
+    #         # Update the current D-pad state
+    #         self.axis_flags['D-Pad'] = dpad_state
+
 
     def get_triggers(self):
 
@@ -96,7 +126,6 @@ class InputManager:
                 #     self.direction = (event.value[0], -event.value[1])
 
                 if event.type == pygame.JOYHATMOTION:
-                    self.update_control_type(self.joystick_name)
                     direction = event.value
                     AXIS_PRESSED['D-Pad'] = direction
 
@@ -124,6 +153,7 @@ class InputManager:
                     AXIS_PRESSED.update({'Left Stick':left_stick,'Right Stick':right_stick,
                                         'Left Trigger':left_trigger,'Right Trigger':right_trigger})
                 self.get_triggers()
+                #self.get_hats()
 
             else:
                 self.mouse_pos = pygame.mouse.get_pos()
@@ -142,7 +172,6 @@ class InputManager:
                             ACTIONS[action] = 1 
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print(event.button)
                     if self.bind_mode: self.new_bind['Keyboard'] = event.button#MOUSE_BUTTON_NAMES[event.button]
                     
                     for action, value in KEY_MAP.items():

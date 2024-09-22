@@ -9,13 +9,16 @@ class BaseMenu:
 
 		self.game = game
 		self.scene = scene
-		self.navigation_timer = Timer(0.3)
+		self.navigation_timer = Timer(0.2)
 		self.title = 'Press any key'
-		self.element_list = ['Press any key']
+		self.start_y = TILESIZE * 4
+		self.line_spacing = TILESIZE
+		self.element_list = ['']
 		self.index = 0
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
+		self.key_button_prompts = self.get_key_button_prompts(['Confirm'])
 		self.cursors = self.get_cursors()
 		self.menu_cursor = self.get_mouse_cursor('menu_cursor')
 		self.alpha = 0
@@ -26,7 +29,7 @@ class BaseMenu:
 
 	def get_mouse_cursor(self, cursor_type):
 	   	if not self.game.input.joystick:
-	   		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.image.load(f'../assets/particles/{cursor_type}.png'), 7)
+	   		cursor = Entity([self.menu_sprites], self.game.input.mouse_pos, pygame.image.load(f'../assets/particles/{cursor_type}.png').convert_alpha(), 7)
 	   		return cursor
 
 	def get_cursors(self):
@@ -36,11 +39,25 @@ class BaseMenu:
 			cursors.append(obj)
 		return cursors
 
+	def get_key_button_prompts(self, prompts):
+		offset = 0
+		for prompt in prompts:
+			if self.game.input.joystick:
+				offset += self.line_spacing
+				surface = self.game.font.render(prompt, False, COLOURS['cyan'])
+				pos = WIDTH - TILESIZE * 1.5, HEIGHT - TILESIZE/2 - (self.line_spacing * len(prompts)) + offset
+				element = Entity([self.menu_sprites], pos, surface, 6, 'midright')
+
+				icon = BUTTON_NAMES[self.game.input.joystick_name][BUTTON_MAPS[self.game.input.joystick_name][prompt]]
+				action_surface = pygame.image.load(f'../assets/controller_button_icons/{self.game.input.joystick_name}/{icon}.png').convert_alpha()
+				action_element = Entity([self.menu_sprites], element.rect.midright, action_surface, 6, 'midleft')
+
 	def get_elements(self, alignment='center', panel_width=144):
  
 		panel_surface = pygame.Surface((panel_width, HEIGHT))
 		panel_surface.fill((COLOURS['black']))
 		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, 3)
+		self.panel_element.image.fill((0,0,0))
 
 		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'])
 		title_element = Entity([self.menu_sprites], (self.panel_element.rect.centerx, self.panel_element.rect.top + TILESIZE*2), title_surface, 3)
@@ -48,15 +65,14 @@ class BaseMenu:
 		elements = []
 		offset = 0
 	
-		start_y = TILESIZE * 4
-		line_spacing = TILESIZE
+		
 		for option in self.element_list:
-			offset += line_spacing
-			surface = self.game.font.render(option, False, COLOURS['cyan'])
+			offset += self.line_spacing
+			surface = self.game.font.render(option, False, COLOURS['cyan']).convert_alpha()
 
 			special_option = option in ['Back', 'Quit', 'Quit to Menu']
-			start_x = self.panel_element.rect.centerx if special_option or alignment == 'center' else self.panel_element.rect.x + TILESIZE * 1.5
-			pos = (start_x, start_y + offset + (TILESIZE * 0.5 if special_option else 0))
+			start_x = self.panel_element.rect.centerx if special_option or alignment == 'center' else self.panel_element.rect.x + self.line_spacing * 1.5
+			pos = (start_x, self.start_y + offset + (TILESIZE * 0.5 if special_option else 0))
 
 			element = Entity([self.menu_sprites], pos, surface, 3, alignment if not special_option else None)
 			elements.append(element)
@@ -71,8 +87,8 @@ class BaseMenu:
 			if element_rect.collidepoint(self.game.input.mouse_pos):
 				self.index = index
 				if self.alpha == 255 and not self.game.block_input and ACTIONS['Left Click']:
-					ACTIONS['OK'] = 1
-					print(ACTIONS['OK'])
+					ACTIONS['Confirm'] = 1
+					print(ACTIONS['Confirm'])
 
 		if self.index != prev_index:
 			for cursor in self.cursors:
@@ -99,7 +115,7 @@ class BaseMenu:
 					elif ACTIONS['Menu Up'] or AXIS_PRESSED['Left Stick'][1] < 0:
 						self.index = (self.index - 1) % len(self.elements)
 		else:
-			ACTIONS['OK'] = 0
+			ACTIONS['Confirm'] = 0
 			ACTIONS['Back'] = 0
 			for cursor in self.cursors:
 				cursor.frame_index = 0
@@ -115,7 +131,7 @@ class BaseMenu:
 			self.alpha = 255
 		for sprite in self.menu_sprites:
 			if sprite == self.panel_element:
-				sprite.image.set_alpha(min(self.alpha, 200))
+				sprite.image.set_alpha(min(self.alpha, 128))
 			else:
 				sprite.image.set_alpha(self.alpha)
 
