@@ -22,7 +22,7 @@ class BindKeyboard(BaseMenu):
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
 		self.mouse_animation = AnimatedEntity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.4), f'../assets/menu_animations/mouse', 10, z=6)
-		self.message = Entity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.6), self.game.font.render('Move mouse to aim', False, COLOURS['white']), 5)
+		self.message = Entity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.65), self.game.font.render('Move mouse to aim', False, COLOURS['white']), 5)
 		self.alpha = 0
 		
 	def get_bindings(self, alignment='center'):
@@ -33,7 +33,7 @@ class BindKeyboard(BaseMenu):
 		line_spacing = TILESIZE
 
 		for option in self.element_list:
-			if option != 'Back':
+			if option not in ['Back','Reset Defaults']:
 				offset += self.line_spacing
 				for action, key in KEY_MAP.items():
 					if action == option:
