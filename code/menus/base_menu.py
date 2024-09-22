@@ -35,7 +35,7 @@ class BaseMenu:
 	def get_cursors(self):
 		cursors = []
 		for cursor in ['right','left']:
-			obj = AnimatedEntity([self.menu_sprites], RES/2, 30, f'../assets/particles/menu_cursor_{cursor}', z=3)
+			obj = AnimatedEntity([self.menu_sprites], RES/2, f'../assets/particles/menu_cursor_{cursor}',30, 'once', z=3)
 			cursors.append(obj)
 		return cursors
 
@@ -48,15 +48,16 @@ class BaseMenu:
 				pos = WIDTH - TILESIZE * 1.5, HEIGHT - TILESIZE/2 - (self.line_spacing * len(prompts)) + offset
 				element = Entity([self.menu_sprites], pos, surface, 6, 'midright')
 
-				icon = BUTTON_NAMES[self.game.input.joystick_name][BUTTON_MAPS[self.game.input.joystick_name][prompt]]
-				action_surface = pygame.image.load(f'../assets/controller_button_icons/{self.game.input.joystick_name}/{icon}.png').convert_alpha()
+				mapped_prompt = BUTTON_MAPS[self.game.input.joystick_name][prompt]
+				icon_name = BUTTON_NAMES[self.game.input.joystick_name][mapped_prompt]
+				action_surface = pygame.image.load(f'../assets/controller_button_icons/{self.game.input.joystick_name}/{icon_name}.png').convert_alpha()
 				action_element = Entity([self.menu_sprites], element.rect.midright, action_surface, 6, 'midleft')
 
-	def get_elements(self, alignment='center', panel_width=144):
+	def get_elements(self, alignment='center', panel_width=144, panel_x_pos=WIDTH*0.5):
  
 		panel_surface = pygame.Surface((panel_width, HEIGHT))
 		panel_surface.fill((COLOURS['black']))
-		self.panel_element = Entity([self.menu_sprites], (WIDTH*0.5,HEIGHT*0.5), panel_surface, 3)
+		self.panel_element = Entity([self.menu_sprites], (panel_x_pos,HEIGHT*0.5), panel_surface, 3)
 		self.panel_element.image.fill((0,0,0))
 
 		title_surface = self.game.font.render(str(self.title), False, COLOURS['white'])
@@ -70,7 +71,7 @@ class BaseMenu:
 			offset += self.line_spacing
 			surface = self.game.font.render(option, False, COLOURS['cyan']).convert_alpha()
 
-			special_option = option in ['Back', 'Quit', 'Quit to Menu']
+			special_option = option in ['Back','Quit','Reset Defaults','Quit to Menu']
 			start_x = self.panel_element.rect.centerx if special_option or alignment == 'center' else self.panel_element.rect.x + self.line_spacing * 1.5
 			pos = (start_x, self.start_y + offset + (TILESIZE * 0.5 if special_option else 0))
 

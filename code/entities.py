@@ -23,10 +23,11 @@ class Entity(pygame.sprite.Sprite):
         return rect_methods.get(alignment, self.image.get_rect(center=pos))
 
 class AnimatedEntity(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, speed, path, z=1):
+    def __init__(self, groups, pos, path, speed, animation_type='loop', z=1):
         super().__init__(groups)
 
         self.speed = speed
+        self.animation_type = animation_type
         self.z = z
         self.frame_index = 0
         self.frames = get_images(path)
@@ -34,13 +35,13 @@ class AnimatedEntity(pygame.sprite.Sprite):
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
 
-    def animate(self, speed, animation_type='loop'):
+    def animate(self, speed):
         self.frame_index += speed
 
         if self.frame_index >= self.frame_count:
-            if animation_type == 'once':
+            if self.animation_type == 'once':
                 self.frame_index = self.frame_count-1
-            elif animation_type == 'end':
+            elif self.animation_type == 'end':
                 self.kill()
             else:
                 self.frame_index = self.frame_index % self.frame_count
@@ -50,4 +51,4 @@ class AnimatedEntity(pygame.sprite.Sprite):
             self.image = self.frames[current_frame]
         
     def update(self, dt):
-        self.animate(self.speed * dt, 'once')
+        self.animate(self.speed * dt)

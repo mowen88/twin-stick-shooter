@@ -26,7 +26,7 @@ class Pause(BaseMenu):
 				ACTIONS[action] = 0
 
 		elif ACTIONS['Confirm'] and self.selection == 'Audio':
-			from menus.options import Audio
+			from menus.audio import Audio
 			self.scene.menu = Audio(self.game, self.scene)
 			for action in ACTIONS:
 				ACTIONS[action] = 0
@@ -47,6 +47,7 @@ class Pause(BaseMenu):
 			ACTIONS['Pause'] = 0
 			ACTIONS['Confirm'] = 0
 			ACTIONS['Back'] = 0
+			ACTIONS['Left Click'] = 0
 
 
 		

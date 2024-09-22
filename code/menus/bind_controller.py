@@ -12,15 +12,20 @@ class BindController(BaseMenu):
 		self.instantiate_images = False
 		self.title = f'{self.game.input.joystick_name}'
 		self.start_y = TILESIZE * 2.5
-		self.element_list = ['Attack', 'Dash', 'Inventory', 'Pause', 'Back']
+		self.element_list = ['Attack', 'Dash', 'Inventory', 'Pause','Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
-		self.elements = self.get_elements('midleft',226)
+		self.elements = self.get_elements('midleft',226, WIDTH * 0.3)
 		self.bindings = self.get_bindings('midright')
-		self.key_button_prompts = self.get_key_button_prompts(['Default','Confirm','Back'])
+		self.key_button_prompts = self.get_key_button_prompts(['Reset Defaults','Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
+		self.left_stick_animation = AnimatedEntity([self.menu_sprites], (WIDTH*0.25, HEIGHT*0.8), f'../assets/menu_animations/left_stick', 4, z=6)
+		self.d_pad_animation = AnimatedEntity([self.menu_sprites], (WIDTH*0.35, HEIGHT*0.8), f'../assets/menu_animations/d-pad', 4, z=6)
+		self.right_stick_animation = AnimatedEntity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.4), f'../assets/menu_animations/right_stick', 4, z=6)
+		self.move_message = Entity([self.menu_sprites], (WIDTH*0.3, HEIGHT*0.95), self.game.font.render('Left stick or D-pad to move', False, COLOURS['white']), 6)
+		self.right_stick_message = Entity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.55), self.game.font.render('Right stick to aim', False, COLOURS['white']), 6)
 		self.alpha = 0
 		
 	def get_bindings(self, alignment='center'):
@@ -97,7 +102,7 @@ class BindController(BaseMenu):
 
 			self.reset_actions()
 
-		elif ACTIONS['Default']:
+		elif ACTIONS['Reset Defaults']:
 			self.reset_defaults()
 			self.reset_actions()
 

@@ -12,15 +12,17 @@ class BindKeyboard(BaseMenu):
 		self.instantiate_images = False
 		self.title = 'Keyboard Controls'
 		self.start_y = TILESIZE * 2.5
-		self.element_list = ['Up','Down','Left','Right','Attack', 'Dash', 'Inventory', 'Pause', 'Back']
+		self.element_list = ['Up','Down','Left','Right','Attack', 'Dash', 'Inventory', 'Pause', 'Reset Defaults','Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
-		self.elements = self.get_elements('midleft',226)
+		self.elements = self.get_elements('midleft',226, WIDTH * 0.3)
 		self.bindings = self.get_bindings('midright')
-		self.key_button_prompts = self.get_key_button_prompts(['Default','Confirm','Back'])
+		self.key_button_prompts = self.get_key_button_prompts(['Reset Defaults','Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
+		self.mouse_animation = AnimatedEntity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.4), f'../assets/menu_animations/mouse', 10, z=6)
+		self.message = Entity([self.menu_sprites], (WIDTH*0.8, HEIGHT*0.6), self.game.font.render('Move mouse to aim', False, COLOURS['white']), 5)
 		self.alpha = 0
 		
 	def get_bindings(self, alignment='center'):
@@ -86,6 +88,10 @@ class BindKeyboard(BaseMenu):
 				else:
 					self.scene.menu = Options(self.game, self.scene)
 
+			elif self.selection == 'Reset Defaults':
+				self.reset_defaults()
+				self.reset_actions()
+
 			elif not self.game.input.joystick:
 				self.game.input.bind_mode = True
 				self.instantiate_images = True
@@ -100,7 +106,7 @@ class BindKeyboard(BaseMenu):
 				self.scene.menu = Options(self.game, self.scene)
 			self.reset_actions()
 
-		elif ACTIONS['Default']:
+		elif ACTIONS['Reset Defaults']:
 			self.reset_defaults()
 			self.reset_actions()
 			

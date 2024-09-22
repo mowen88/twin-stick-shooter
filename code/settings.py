@@ -31,7 +31,7 @@ KEY_MAP = {
 			'Left':[pygame.K_LEFT], 'Right':[pygame.K_RIGHT], 'Up':[pygame.K_UP], 'Down':[pygame.K_DOWN],
 			'Attack':[pygame.K_z], 'Dash':[pygame.K_x], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
 			'Left Click':[1],'Confirm':[pygame.K_SPACE, pygame.K_RETURN], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
-			'Default':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
+			'Reset Defaults':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
 			'Menu Left':[pygame.K_LEFT, pygame.K_a], 'Menu Right':[pygame.K_RIGHT, pygame.K_d]
 			}
 
@@ -39,48 +39,48 @@ DEFAULT_KEY_MAP = {
 			'Left':[pygame.K_LEFT], 'Right':[pygame.K_RIGHT], 'Up':[pygame.K_UP], 'Down':[pygame.K_DOWN],
 			'Attack':[pygame.K_z], 'Dash':[pygame.K_x], 'Inventory':[pygame.K_i], 'Pause':[pygame.K_SPACE],
 			'Left Click':[1],'Confirm':[pygame.K_SPACE, pygame.K_RETURN], 'Back':[pygame.K_ESCAPE, pygame.K_BACKSPACE],
-			'Default':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
+			'Reset Defaults':[pygame.K_TAB],'Menu Up':[pygame.K_UP, pygame.K_w], 'Menu Down':[pygame.K_DOWN, pygame.K_s],
 			'Menu Left':[pygame.K_LEFT, pygame.K_a], 'Menu Right':[pygame.K_RIGHT, pygame.K_d]
 			}
 
 ACTIONS = {'Menu Up':0, 'Menu Down':0, 'Menu Left':0, 'Menu Right':0, 'Up':0, 'Down':0, 'Left':0, 'Right':0,
-			'Attack':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'Confirm':0, 'Back':0,'Left Click':0,'Default':0}
+			'Attack':0, 'Dash':0, 'Inventory':0, 'Pause':0, 'Confirm':0, 'Back':0,'Left Click':0,'Reset Defaults':0}
 
                   
 BUTTON_MAPS = {
 			'Mouse':
 				{'Attack':1, 'Dash':0, 'Inventory':0, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
-				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Default':6},
+				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
 				{'Attack':0, 'Dash':1, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':4},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
 			'PS4 Controller':
 				{'Attack':0, 'Dash':0, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
 			'Xbox 360 Controller':
 				{'Attack':	0, 'Dash':1, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			'DualSense Wireless Controller':
 				{'Attack':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			}
 
 DEFAULT_BUTTON_MAPS = {
 			'Mouse':
 				{'Attack':1, 'Dash':0, 'Inventory':0, 'Pause':1, 'Up':0, 'Down':0,'Left':0, 'Right':0,
-				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Default':6},
+				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
 				{'Attack':0, 'Dash':1, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':4},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
 			'PS4 Controller':
 				{'Attack':0, 'Dash':0, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
 			'Xbox 360 Controller':
 				{'Attack':	0, 'Dash':1, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			'DualSense Wireless Controller':
 				{'Attack':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Default':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
 			}
 
 

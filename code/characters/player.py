@@ -22,30 +22,28 @@ class Player(NPC):
                 self.scene.create_bullet(self.hitbox.center)
                 ACTIONS['Attack'] = 0
 
-            x_direction = 0
-            y_direction = 0
+            direction = vec2()
 
             if AXIS_PRESSED['Left Stick'][0]:
-                x_direction = AXIS_PRESSED['Left Stick'][0]
+                direction.x = AXIS_PRESSED['Left Stick'][0]
             elif AXIS_PRESSED['D-Pad'][0]:
-                x_direction = AXIS_PRESSED['D-Pad'][0] 
+                direction.x = AXIS_PRESSED['D-Pad'][0] 
             elif ACTIONS['Right']:
-                x_direction = ACTIONS['Right']
+                direction.x = ACTIONS['Right']
             elif ACTIONS['Left']:
-                x_direction = -ACTIONS['Left']
+                direction.x = -ACTIONS['Left']
 
             if AXIS_PRESSED['Left Stick'][1]:
-                y_direction = AXIS_PRESSED['Left Stick'][1]
+                direction.y = AXIS_PRESSED['Left Stick'][1]
             elif AXIS_PRESSED['D-Pad'][1]:
-                y_direction = AXIS_PRESSED['D-Pad'][1]
+                direction.y = AXIS_PRESSED['D-Pad'][1] * -1
             elif ACTIONS['Down']:
-                y_direction = ACTIONS['Down']
+                direction.y = ACTIONS['Down']
             elif ACTIONS['Up']:
-                y_direction = -ACTIONS['Up']
+                direction.y = -ACTIONS['Up']
 
-            self.direction.x = x_direction
-            self.direction.y = y_direction
- 
+            self.direction = direction
+
 
     def update(self, dt):
         self.animate('idle', 6 * dt)

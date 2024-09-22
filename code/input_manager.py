@@ -33,40 +33,37 @@ class InputManager:
         self.update_control_type()
         AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right Trigger':0, 'D-Pad':(0,0)}
 
-    # def get_hats(self):
-    #     if not self.game.block_input:
+    def get_hats(self):
+        if not self.game.block_input:
 
-    #         hat_mappings = {'Left':}
 
-    #         hat_mappings = {(0, 1): 11,(0, -1): 12,(-1, 0): 13,(1, 0): 14}
+            hat_mappings = {(0, 1): 11,(0, -1): 12,(-1, 0): 13,(1, 0): 14}
 
-    #         button_map = BUTTON_MAPS[self.joystick_name]
+            button_map = BUTTON_MAPS[self.joystick_name]
 
-    #         # Get current D-pad state
-    #         dpad_state = AXIS_PRESSED['D-Pad']
+            # Get current D-pad state
+            dpad_state = AXIS_PRESSED['D-Pad']
 
-    #         # Iterate over the hat mappings (Up, Down, Left, Right)
-    #         for direction, button_id in hat_mappings.items():
-    #             new_value = 1 if dpad_state == direction else 0
+            # Iterate over the hat mappings (Up, Down, Left, Right)
+            for direction, button_id in hat_mappings.items():
+                new_value = 1 if dpad_state == direction else 0
 
-    #             # Hat pressed logic
-    #             if self.axis_flags['D-Pad'] != direction and new_value == 1:
-    #                 if self.bind_mode:
-    #                     self.new_bind[self.joystick_name] = button_id
+                # Hat pressed logic
+                if self.axis_flags['D-Pad'] != direction and new_value == 1:
+                    if self.bind_mode:
+                        self.new_bind[self.joystick_name] = button_id
 
-    #                 for action, value in button_map.items():
-    #                     if button_id == value:
-    #                         ACTIONS[action] = 1
+                    for action, value in button_map.items():
+                        if button_id == value:
+                            ACTIONS[action] = 1
 
-    #             # Hat released logic
-    #             if self.axis_flags['D-Pad'] == direction and new_value == 0:
-    #                 for action, value in button_map.items():
-    #                     if button_id == value:
-    #                         ACTIONS[action] = 0
+                # Hat released logic
+                if self.axis_flags['D-Pad'] == direction and new_value == 0:
+                    for action, value in button_map.items():
+                        if button_id == value:
+                            ACTIONS[action] = 0
 
-    #         # Update the current D-pad state
-    #         self.axis_flags['D-Pad'] = dpad_state
-
+            self.axis_flags['D-Pad'] = dpad_state
 
     def get_triggers(self):
 
@@ -153,7 +150,7 @@ class InputManager:
                     AXIS_PRESSED.update({'Left Stick':left_stick,'Right Stick':right_stick,
                                         'Left Trigger':left_trigger,'Right Trigger':right_trigger})
                 self.get_triggers()
-                #self.get_hats()
+                self.get_hats()
 
             else:
                 self.mouse_pos = pygame.mouse.get_pos()
