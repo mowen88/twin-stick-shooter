@@ -18,6 +18,9 @@ LAYERS = ['background',
 FONT = '../assets/font/BMSPA___.ttf'
 #FONT = '../assets/homespun.ttf'
 
+VOLUME = {'Master Volume':0.5,'Sound Volume':0.5,'Music Volume':0.5}
+DEFAULT_VOLUME = {'Master Volume':0.5,'Sound Volume':0.5,'Music Volume':0.5}
+
 COLOURS = {
 			'purple':(69,41,63), 'cyan':(143,248,226), 'black':(46,34,47), 'white':(255,255,255), 'olive':(49,54,56),'pale_yellow':(201,204,161),
 			'yellow':(202,160,90),'orange':(174,106,71), 'deep_red':(110,39,39), 'red':(179,56,49), 'burgundy':(84,51,68), 'grey':(81,82,98),'green':(22,90,76),
@@ -54,16 +57,16 @@ BUTTON_MAPS = {
 				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
 				{'Attack':1, 'Shoot':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			'PS4 Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':3},
 			'Xbox 360 Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			'DualSense Wireless Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			}
 
 DEFAULT_BUTTON_MAPS = {
@@ -72,16 +75,16 @@ DEFAULT_BUTTON_MAPS = {
 				'Menu Up':0, 'Menu Down':0,'Menu Left':0, 'Menu Right':0, 'Confirm':1, 'Back':3,'Reset Defaults':6},
 			'Nintendo Switch Pro Controller':
 				{'Attack':1, 'Shoot':0, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':4},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			'PS4 Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':21, 'Back':20,'Reset Defaults':3},
 			'Xbox 360 Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':8, 'Pause':7, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			'DualSense Wireless Controller':
 				{'Attack':0, 'Shoot':1, 'Dash':21, 'Inventory':4, 'Pause':6, 'Up':11, 'Down':12,'Left':13, 'Right':14,
-				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':6},
+				'Menu Up':11, 'Menu Down':12,'Menu Left':13, 'Menu Right':14, 'Confirm':0, 'Back':1,'Reset Defaults':3},
 			}
 
 AXIS_PRESSED = {'Left Stick':(0,0),'Right Stick':(0,0),'Left Trigger':0,'Right Trigger':0, 'D-Pad':(0,0)}

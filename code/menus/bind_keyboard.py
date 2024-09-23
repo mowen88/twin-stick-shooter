@@ -64,10 +64,11 @@ class BindKeyboard(BaseMenu):
 	                    break
 
 	            KEY_MAP[current_action] = [new_key] # assign new key to the action
-	            self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
+	            self.scene.menu = BindKeyboard(self.game, self.scene)
 	            self.reset_actions()
 
 	def reset_defaults(self):
+		self.game.audio.sfx['confirm'].play()
 		KEY_MAP.update(DEFAULT_KEY_MAP)
 		self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
 
@@ -75,6 +76,7 @@ class BindKeyboard(BaseMenu):
 		self.bind_mode()
 
 		if ACTIONS['Confirm'] and not self.game.input.bind_mode:
+			self.game.audio.sfx['confirm'].play()
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
@@ -93,6 +95,7 @@ class BindKeyboard(BaseMenu):
 			self.reset_actions()
 
 		elif ACTIONS['Back'] and not self.game.input.bind_mode:
+			self.game.audio.sfx['back'].play()
 			if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 				from menus.pause import Pause
 				self.scene.menu = Pause(self.game, self.scene)
@@ -102,7 +105,7 @@ class BindKeyboard(BaseMenu):
 
 		elif self.game.input.joystick:
 			from menus.bind_controller import BindController
-			self.scene.menu = BindController(self.game, self.scene, self.index)
+			self.scene.menu = BindController(self.game, self.scene)
 
 		elif ACTIONS['Reset Defaults']:
 			self.reset_defaults()

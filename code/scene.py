@@ -55,16 +55,16 @@ class Scene(State):
 
         if not self.game.block_input:
             if ACTIONS['Pause']:
+                self.game.audio.sfx['confirm'].play()
                 self.menu.index = 0
                 self.paused = not self.paused
+                self.game.audio.pause_music(self.paused)
                 for sprite in self.menu.menu_sprites:
                     sprite.frame_index = 0
                 #from menus.menu import BaseMenu
                 ACTIONS['Pause'] = 0
                 ACTIONS['Confirm'] = 0
                 self.menu.alpha = 0
-
-
 
         # if self.quit_to_menu:
         #     self.paused = False

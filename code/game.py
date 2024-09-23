@@ -2,6 +2,7 @@ import pygame, sys, os, time, json, cProfile
 from pygame import mixer
 from os import walk
 from input_manager import InputManager
+from audio_manager import AudioManager
 from menus.splash_screen import PygameLogo
 from settings import *
 
@@ -12,17 +13,20 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED, vsync=1)
         self.font = pygame.font.Font(FONT, 9)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
         self.in_menu = False
         self.block_input = False
         self.input = InputManager(self)
+        self.audio = AudioManager(self)
         
         self.stack = []
         self.pygame_logo = PygameLogo(self)
         self.stack.append(self.pygame_logo)
+
+        
 
     def quit(self):
         self.running = False
@@ -51,6 +55,7 @@ class Game:
         dt = self.clock.tick()/1000
         events = pygame.event.get()
         self.input.get_input(events)
+        self.audio.run()
         self.update(dt)
         self.draw(self.screen)
 

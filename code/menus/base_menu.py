@@ -9,6 +9,7 @@ class BaseMenu:
 
 		self.game = game
 		self.scene = scene
+		self.prev_joystick_state = self.game.input.joystick
 		self.navigation_timer = Timer(0.2)
 		self.title = 'Press any key'
 		self.start_y = TILESIZE * 4
@@ -86,10 +87,9 @@ class BaseMenu:
 			element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
 			if element_rect.collidepoint(self.game.input.mouse_pos):
 				self.index = index
-				if self.alpha == 255 and not self.game.block_input and ACTIONS['Left Click']:
+				if ACTIONS['Left Click']:
 					ACTIONS['Confirm'] = 1
-					print(ACTIONS['Confirm'])
-
+		
 		if self.index != prev_index:
 			for cursor in self.cursors:
 				cursor.frame_index = 0
@@ -107,6 +107,7 @@ class BaseMenu:
 			if not self.navigation_timer.running and not self.game.input.bind_mode:
 				if ACTIONS['Menu Down'] or ACTIONS['Menu Up'] or abs(AXIS_PRESSED['Left Stick'][1]) > 0:
 					self.navigation_timer.start()
+					self.game.audio.sfx['navigate'].play()
 					for cursor in self.cursors:
 						cursor.frame_index = 0
 
@@ -135,11 +136,17 @@ class BaseMenu:
 			else:
 				sprite.image.set_alpha(self.alpha)
 
+	def reset_menu(self):
+		current_joystick_state = self.game.input.joystick
+		if current_joystick_state != self.prev_joystick_state:
+			self.scene.menu = type(self)(self.game, self.scene)
+
 	def next_scene(self):
 		pass
 
 	def update(self, dt):
 
+		self.reset_menu()
 		self.fade_in(1500 * dt)
 		self.navigate()
 		self.navigation_timer.update(dt)

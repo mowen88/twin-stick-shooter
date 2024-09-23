@@ -21,17 +21,20 @@ class Pause(BaseMenu):
 		
 		if ACTIONS['Confirm'] and self.selection == 'Quit to Menu':
 			self.scene.paused = not self.scene.paused
+			self.game.audio.pause_music(self.scene.paused)
 			self.scene.transition.on_complete = [self.scene.next_scene]
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
 		elif ACTIONS['Confirm'] and self.selection == 'Audio':
+			self.game.audio.sfx['confirm'].play()
 			from menus.audio import Audio
 			self.scene.menu = Audio(self.game, self.scene)
 			for action in ACTIONS:
 				ACTIONS[action] = 0
 
 		elif ACTIONS['Confirm'] and self.selection == 'Controls':
+			self.game.audio.sfx['confirm'].play()
 			if self.game.input.joystick:
 				from menus.bind_controller import BindController
 				self.scene.menu = BindController(self.game, self.scene)
@@ -43,7 +46,9 @@ class Pause(BaseMenu):
 				ACTIONS[action] = 0
 
 		elif ACTIONS['Confirm'] or ACTIONS['Pause'] or ACTIONS['Back']:
+			self.game.audio.sfx['back'].play()
 			self.scene.paused = not self.scene.paused
+			self.game.audio.pause_music(self.scene.paused)
 			ACTIONS['Pause'] = 0
 			ACTIONS['Confirm'] = 0
 			ACTIONS['Back'] = 0

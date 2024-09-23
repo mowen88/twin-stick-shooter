@@ -43,6 +43,7 @@ class TitleScene(State):
 		self.get_bg_particles()
 		self.menu = MainMenu(self.game, self)
 		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 1000)
+		self.game.audio.play_music('Detox')
 
 	def get_bg_particles(self):
 		circles = []
@@ -72,7 +73,7 @@ class TitleScene(State):
 
 		self.menu.draw(screen)
 
-		self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
-                    str('Stack: ' + str(len(self.game.stack))),
-                    str(self.transition.alpha),
-                    None])
+		# self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
+        #             str('Stack: ' + str(len(self.game.stack))),
+        #             str(self.transition.alpha),
+        #             None])

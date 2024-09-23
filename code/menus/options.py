@@ -21,6 +21,7 @@ class Options(BaseMenu):
 
 	def next_scene(self):
 		if ACTIONS['Confirm']:
+			self.game.audio.sfx['confirm'].play()
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'):
 					self.scene.menu = Pause(self.game, self.scene)
@@ -42,6 +43,7 @@ class Options(BaseMenu):
 			self.reset_actions()
 
 		elif ACTIONS['Back']:
+			self.game.audio.sfx['back'].play()
 			if hasattr(self.scene, 'paused'):
 				self.scene.menu = Pause(self.game, self.scene)
 			else:
@@ -61,6 +63,8 @@ class Credits(BaseMenu):
 
 	def next_scene(self):
 		if ACTIONS['Confirm']:
+			self.game.audio.sfx['confirm'].play()
+			self.game.audio.sfx['confirm'].play()
 			self.scene.menu = MainMenu(self.game, self.scene)
 			self.reset_actions()
 

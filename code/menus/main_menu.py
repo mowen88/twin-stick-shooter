@@ -20,6 +20,7 @@ class MainMenu(BaseMenu):
 
 	def next_scene(self):
 		if ACTIONS['Confirm']:
+			self.game.audio.sfx['confirm'].play()
 			if self.selection == 'Start Game':
 				self.scene.transition.on_complete = [self.scene.next_scene]
 			elif self.selection == 'Options':

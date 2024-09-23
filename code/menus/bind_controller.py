@@ -70,6 +70,7 @@ class BindController(BaseMenu):
 	            	self.reset_actions()
 
 	def reset_defaults(self):
+		self.game.audio.sfx['confirm'].play()
 		BUTTON_MAPS[self.game.input.joystick_name].update(DEFAULT_BUTTON_MAPS[self.game.input.joystick_name])
 		self.scene.menu = BindController(self.game, self.scene, self.index)
 
@@ -77,6 +78,7 @@ class BindController(BaseMenu):
 		self.bind_mode()
 
 		if ACTIONS['Confirm'] and not self.game.input.bind_mode:
+			self.game.audio.sfx['confirm'].play()
 			if self.selection == 'Back':
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
@@ -91,6 +93,7 @@ class BindController(BaseMenu):
 			self.reset_actions()
 
 		elif ACTIONS['Back'] and not self.game.input.bind_mode:
+			self.game.audio.sfx['back'].play()
 			if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 				from menus.pause import Pause
 				self.scene.menu = Pause(self.game, self.scene)
@@ -101,7 +104,7 @@ class BindController(BaseMenu):
 
 		elif not self.game.input.joystick:
 			from menus.bind_keyboard import BindKeyboard
-			self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
+			self.scene.menu = BindKeyboard(self.game, self.scene)
 
 		elif ACTIONS['Reset Defaults']:
 			self.reset_defaults()
