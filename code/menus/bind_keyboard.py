@@ -1,4 +1,5 @@
 from settings import *
+from support import write_data
 from entities import Entity, AnimatedEntity
 from menus.options import Options
 from menus.base_menu import BaseMenu
@@ -45,6 +46,7 @@ class BindKeyboard(BaseMenu):
 	def bind_mode(self):
 	    if self.game.input.bind_mode:
 	        if self.instantiate_images:
+	            self.game.audio.sfx['navigate'].play()
 	            pos = (self.panel_element.rect.centerx, self.elements[self.index].rect.centery)
 	            size = (self.panel_element.rect.width, 15)
 	            message = f'Press a key for {self.element_list[self.index]}'
@@ -58,26 +60,28 @@ class BindKeyboard(BaseMenu):
 	            current_action = self.selection
   
 	            for action, key in KEY_MAP.items(): # check for duplicates
-	                if key[0] == new_key and action != current_action and action in self.element_list:
+	                if key[0] == new_key and action not in [current_action, 'Back','Reset Defaults'] and action in self.element_list:
 	                    # Swap keys
 	                    KEY_MAP[action] = KEY_MAP[current_action]
 	                    break
 
 	            KEY_MAP[current_action] = [new_key] # assign new key to the action
+	            self.game.audio.sfx['confirm'].play()
 	            self.scene.menu = BindKeyboard(self.game, self.scene)
 	            self.reset_actions()
 
 	def reset_defaults(self):
-		self.game.audio.sfx['confirm'].play()
-		KEY_MAP.update(DEFAULT_KEY_MAP)
-		self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
+	    self.game.audio.sfx['reset'].play()
+	    KEY_MAP.update(DEFAULT_KEY_MAP)
+	    self.scene.menu = BindKeyboard(self.game, self.scene, self.index)
 
 	def next_scene(self):
 		self.bind_mode()
 
 		if ACTIONS['Confirm'] and not self.game.input.bind_mode:
-			self.game.audio.sfx['confirm'].play()
+			
 			if self.selection == 'Back':
+				self.game.audio.sfx['back'].play()
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
 					self.scene.menu = Pause(self.game, self.scene)

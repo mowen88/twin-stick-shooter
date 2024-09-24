@@ -21,18 +21,20 @@ class Options(BaseMenu):
 
 	def next_scene(self):
 		if ACTIONS['Confirm']:
-			self.game.audio.sfx['confirm'].play()
 			if self.selection == 'Back':
+				self.game.audio.sfx['back'].play()
 				if hasattr(self.scene, 'paused'):
 					self.scene.menu = Pause(self.game, self.scene)
 				else:
 					self.scene.menu = MainMenu(self.game, self.scene)
 
 			elif self.selection == 'Audio':
+				self.game.audio.sfx['confirm'].play()
 				from menus.audio import Audio
 				self.scene.menu = Audio(self.game, self.scene)
 
 			elif self.selection == 'Controls':
+				self.game.audio.sfx['confirm'].play()
 				if self.game.input.joystick:
 					from menus.bind_controller import BindController
 					self.scene.menu = BindController(self.game, self.scene)

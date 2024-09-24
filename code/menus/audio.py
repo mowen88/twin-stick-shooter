@@ -94,7 +94,7 @@ class Audio(BaseMenu):
 			cursor.frame_index = 0
 
 	def reset_defaults(self):
-		self.game.audio.sfx['confirm'].play()
+		self.game.audio.sfx['reset'].play()
 		for index, volume in enumerate(VOLUME):
 			VOLUME[volume] = 0.5
 			self.volume_sliders[index].image = self.volume_images[5]

@@ -33,7 +33,7 @@ class BindController(BaseMenu):
 
 		offset = 0
 		for option in self.element_list:
-			if option != 'Back':
+			if option not in ['Back','Reset Defaults']:
 				offset += self.line_spacing
 				for action, button_id in BUTTON_MAPS[self.game.input.joystick_name].items():
 					if action == option:
@@ -47,6 +47,7 @@ class BindController(BaseMenu):
 	def bind_mode(self):
 	    if self.game.input.bind_mode:
 	        if self.instantiate_images:
+	        	self.game.audio.sfx['navigate'].play()
 	            pos = (self.panel_element.rect.centerx, self.elements[self.index].rect.centery)
 	            size = (self.panel_element.rect.width, 15)
 	            message = f'Press a button for {self.element_list[self.index]}'
@@ -61,16 +62,17 @@ class BindController(BaseMenu):
 	            	current_action = self.selection
 
 	            	for action, button_id in BUTTON_MAPS[self.game.input.joystick_name].items(): # check for duplicate
-	            		if button_id == new_button and action != current_action and action in self.element_list:
+	            		if button_id == new_button  and action not in [current_action, 'Back','Reset Defaults']and action in self.element_list:
 	            			BUTTON_MAPS[self.game.input.joystick_name][action] = BUTTON_MAPS[self.game.input.joystick_name][current_action]
 	            			break
 
 	            	BUTTON_MAPS[self.game.input.joystick_name][current_action] = new_button # assign new button to action
+	            	self.game.audio.sfx['confirm'].play()
 	            	self.scene.menu = BindController(self.game, self.scene, self.index)
 	            	self.reset_actions()
 
 	def reset_defaults(self):
-		self.game.audio.sfx['confirm'].play()
+		self.game.audio.sfx['reset'].play()
 		BUTTON_MAPS[self.game.input.joystick_name].update(DEFAULT_BUTTON_MAPS[self.game.input.joystick_name])
 		self.scene.menu = BindController(self.game, self.scene, self.index)
 
@@ -78,8 +80,9 @@ class BindController(BaseMenu):
 		self.bind_mode()
 
 		if ACTIONS['Confirm'] and not self.game.input.bind_mode:
-			self.game.audio.sfx['confirm'].play()
+			
 			if self.selection == 'Back':
+				self.game.audio.sfx['back'].play()
 				if hasattr(self.scene, 'paused'): # if scene is in game and has a pause variable
 					from menus.pause import Pause
 					self.scene.menu = Pause(self.game, self.scene)

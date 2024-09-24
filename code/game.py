@@ -4,6 +4,7 @@ from os import walk
 from input_manager import InputManager
 from audio_manager import AudioManager
 from menus.splash_screen import PygameLogo
+from support import read_data, write_data
 from settings import *
 
 class Game:
@@ -13,7 +14,7 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED, vsync=1)
+        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED, vsync=1)
         self.font = pygame.font.Font(FONT, 9)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
@@ -26,9 +27,14 @@ class Game:
         self.pygame_logo = PygameLogo(self)
         self.stack.append(self.pygame_logo)
 
-        
+        read_data('key_map.txt', KEY_MAP)
+        read_data('volume.txt', VOLUME)
+        read_data('button_maps.txt', BUTTON_MAPS)
 
     def quit(self):
+        write_data('volume.txt', VOLUME)
+        write_data('key_map.txt', KEY_MAP)
+        write_data('button_maps.txt', BUTTON_MAPS)
         self.running = False
         pygame.quit() 
         sys.exit()

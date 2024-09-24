@@ -42,10 +42,6 @@ class Scene(State):
         events.get_input()
 
     def update(self, dt):
-        
-        # if ACTIONS['Back']:
-        #     self.transition.on_complete = [self.next_scene]
-        #     ACTIONS['Back'] = 0
         if self.paused:
             self.crosshair.rect.topleft = RES
             self.menu.update(dt)
@@ -55,16 +51,18 @@ class Scene(State):
 
         if not self.game.block_input:
             if ACTIONS['Pause']:
+                self.paused = not self.paused
                 self.game.audio.sfx['confirm'].play()
                 self.menu.index = 0
-                self.paused = not self.paused
                 self.game.audio.pause_music(self.paused)
                 for sprite in self.menu.menu_sprites:
                     sprite.frame_index = 0
                 #from menus.menu import BaseMenu
                 ACTIONS['Pause'] = 0
                 ACTIONS['Confirm'] = 0
-                self.menu.alpha = 0
+                ACTIONS['Left Click'] = 0
+
+        
 
         # if self.quit_to_menu:
         #     self.paused = False
@@ -78,9 +76,8 @@ class Scene(State):
         for sprite in sorted_sprites:
             screen.blit(sprite.image, sprite.rect)
 
-        if self.paused:
-            self.menu.draw(screen)
-
+        if self.paused: self.menu.draw(screen)
+ 
         self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
                     str('Stack: ' + str(len(self.game.stack))),
                     str(self.transition.alpha),

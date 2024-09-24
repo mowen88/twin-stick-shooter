@@ -7,7 +7,7 @@ class State():
 		self.game = game
 		self.prev_state = None
 		self.update_sprites = pygame.sprite.Group()
-		self.drawn_sprites = pygame.sprite.LayeredUpdates()
+		self.drawn_sprites = pygame.sprite.Group()
 		self.menu_sprites = pygame.sprite.Group()
 		
 	def enter_state(self):

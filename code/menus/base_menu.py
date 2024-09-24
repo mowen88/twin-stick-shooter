@@ -91,6 +91,7 @@ class BaseMenu:
 					ACTIONS['Confirm'] = 1
 		
 		if self.index != prev_index:
+			self.game.audio.sfx['navigate'].play()
 			for cursor in self.cursors:
 				cursor.frame_index = 0
 
@@ -127,9 +128,9 @@ class BaseMenu:
 
 
 	def fade_in(self, speed):
-		self.alpha += speed
-		if self.alpha >= 255:
-			self.alpha = 255
+
+		self.alpha = min(self.alpha + speed, 255)
+
 		for sprite in self.menu_sprites:
 			if sprite == self.panel_element:
 				sprite.image.set_alpha(min(self.alpha, 128))

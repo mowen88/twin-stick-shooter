@@ -1,0 +1,1 @@
+{"Left": [1073741904], "Right": [1073741903], "Up": [1073741906], "Down": [1073741905], "Attack": [122], "Shoot": [120], "Dash": [99], "Inventory": [105], "Pause": [32], "Left Click": [1], "Confirm": [32, 13], "Back": [27, 8], "Reset Defaults": [9], "Menu Up": [1073741906, 119], "Menu Down": [1073741905, 115], "Menu Left": [1073741904, 97], "Menu Right": [1073741903, 100]}

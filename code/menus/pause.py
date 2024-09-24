@@ -15,7 +15,7 @@ class Pause(BaseMenu):
 		self.button_prompts = self.get_button_prompts(['Confirm','Back'])
 		self.cursors = self.get_cursors()
 		self.cursor = self.get_mouse_cursor('menu_cursor')
-		self.alpha = 0
+		self.alpha = 255
 
 	def next_scene(self):
 		
