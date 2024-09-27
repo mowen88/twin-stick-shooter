@@ -13,7 +13,7 @@ class BindKeyboard(BaseMenu):
 		self.instantiate_images = False
 		self.title = 'KEYBOARD AND MOUSE'
 		self.start_y = TILESIZE * 2
-		self.element_list = ['Up','Down','Left','Right','Attack','Shoot','Dash','Inventory','Pause','Reset Defaults','Back']
+		self.element_list = ['Up','Down','Left','Right','Jump','Attack','Dash','Inventory','Pause','Reset Defaults','Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()

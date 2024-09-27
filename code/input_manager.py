@@ -36,7 +36,6 @@ class InputManager:
     def get_hats(self):
         if not self.game.block_input:
 
-
             hat_mappings = {(0, 1): 11,(0, -1): 12,(-1, 0): 13,(1, 0): 14}
 
             button_map = BUTTON_MAPS[self.joystick_name]
@@ -91,6 +90,36 @@ class InputManager:
                             ACTIONS[action] = 0
 
                 self.axis_flags[trigger] = new_trigger_value
+
+    def get_left_stick(self):
+
+        if not self.game.block_input:
+        
+            directions = {'Up':11, 'Down':12, 'Left': 13, 'Right':14}
+            button_map = BUTTON_MAPS[self.joystick_name]
+
+            for direction, direction_id in directions.items():
+                for axis in [0,1]:
+                    # Get the current trigger value (from axis)
+                    current_value = axis
+                    new_direction_value = 1 if current_value > TRIGGER_DEADZONE else 0
+                    # Trigger pressed logic
+                    if self.axis_flags['Left Stick'][axis] == 0 and new_direction_value == 1:
+                        if self.bind_mode: self.new_bind[self.joystick_name] = direction_id
+
+                        for action, value in button_map.items():
+                            if direction_id == value:
+                                ACTIONS[action] = 1
+
+                    # Trigger released logic
+                    if self.axis_flags['Left Stick'][axis] == 1 and new_direction_value == 0:
+                        for action, value in button_map.items():
+                            if direction_id == value:
+                                ACTIONS[action] = 0
+
+                    self.axis_flags['Left Stick'][axis] = new_direction_value
+
+        print (ACTIONS.values())
 
 
     def get_input(self, events):
@@ -149,6 +178,25 @@ class InputManager:
 
                     AXIS_PRESSED.update({'Left Stick':left_stick,'Right Stick':right_stick,
                                         'Left Trigger':left_trigger,'Right Trigger':right_trigger})
+
+                    # if left_stick[0] > DEADZONE:
+                    #     ACTIONS['Right'] = 1
+                    # elif left_stick[0] < -DEADZONE:
+                    #     ACTIONS['Left'] = 1
+                    # else:
+                    #     ACTIONS['Left'] = 0
+                    #     ACTIONS['Right'] = 0
+
+
+                    # if left_stick[1] > DEADZONE:
+                    #     ACTIONS['Down'] = 1
+                    # elif left_stick[1] < -DEADZONE:
+                    #     ACTIONS['Up'] = 1
+                    # else:
+                    #     ACTIONS['Down'] = 0
+                    #     ACTIONS['Up'] = 0
+
+                #self.get_left_stick()
                 self.get_triggers()
                 self.get_hats()
 

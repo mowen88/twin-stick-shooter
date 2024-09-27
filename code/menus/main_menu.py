@@ -7,7 +7,7 @@ class MainMenu(BaseMenu):
 		super().__init__(game, scene)
 
 		self.menu_sprites.empty()
-		self.title = 'MAIN MENU'
+		self.title = 'GOTHAM CITY'
 		self.element_list = ['Start Game','Options', 'Credits','Quit']
 		self.index = 0
 		self.selection = self.element_list[self.index]

@@ -22,6 +22,12 @@ class Entity(pygame.sprite.Sprite):
         }
         return rect_methods.get(alignment, self.image.get_rect(center=pos))
 
+class Block(Entity):
+    def __init__(self, groups, pos, surf=pygame.Surface((TILESIZE, TILESIZE)), z=1, alignment='center'):
+        super().__init__(groups, pos, surf, z, alignment)
+
+        self.hitbox = self.rect
+
 class AnimatedEntity(pygame.sprite.Sprite):
     def __init__(self, groups, pos, path, speed, animation_type='loop', z=1):
         super().__init__(groups)

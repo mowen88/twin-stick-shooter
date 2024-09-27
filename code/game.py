@@ -14,7 +14,7 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED, vsync=1)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)#, vsync=1)
         self.font = pygame.font.Font(FONT, 9)
         self.big_font = pygame.font.Font(FONT, 10)
         self.running = True
@@ -46,7 +46,7 @@ class Game:
         surf = font.render(str(text), False, colour)
         if alignment == 'topleft': rect = surf.get_rect(topleft=pos)
         elif alignment == 'topright': rect = surf.get_rect(topright=pos)
-        elif alignment == 'midtop': rect = surf.get_rect(midtop=pos)
+        elif alignment == 'midtop': rect = suxrf.get_rect(midtop=pos)
         else: rect = surf.get_rect(center = pos)
         self.screen.blit(surf, rect)
 
@@ -58,7 +58,7 @@ class Game:
         pygame.display.flip()
 
     def main_loop(self):
-        dt = self.clock.tick()/1000
+        dt = self.clock.tick(60)/1000
         events = pygame.event.get()
         self.input.get_input(events)
         self.audio.run()

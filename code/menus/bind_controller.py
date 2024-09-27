@@ -13,7 +13,7 @@ class BindController(BaseMenu):
 		self.title_string = self.game.input.joystick_name.replace("Wireless", "").strip().replace("Switch", "").strip().upper()
 		self.title = self.title_string
 		self.start_y = TILESIZE * 2.5
-		self.element_list = ['Attack','Shoot','Dash','Inventory','Pause','Back']
+		self.element_list = ['Jump','Attack','Dash','Inventory','Pause','Back']
 		self.index = index
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
@@ -48,13 +48,13 @@ class BindController(BaseMenu):
 	    if self.game.input.bind_mode:
 	        if self.instantiate_images:
 	        	self.game.audio.sfx['navigate'].play()
-	            pos = (self.panel_element.rect.centerx, self.elements[self.index].rect.centery)
-	            size = (self.panel_element.rect.width, 15)
-	            message = f'Press a button for {self.element_list[self.index]}'
-	            blank = Entity([self.menu_sprites], pos, pygame.Surface(size), 5)
-	            blank.image.fill(COLOURS['cyan'])
-	            text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['black']), 5)
-	            self.instantiate_images = False
+	        	pos = (self.panel_element.rect.centerx, self.elements[self.index].rect.centery)
+	        	size = (self.panel_element.rect.width, 15)
+	        	message = f'Press a button for {self.element_list[self.index]}'
+	        	blank = Entity([self.menu_sprites], pos, pygame.Surface(size), 5)
+	        	blank.image.fill(COLOURS['cyan'])
+	        	text = Entity([self.menu_sprites], pos, self.game.font.render(message, False, COLOURS['black']), 5)
+	        	self.instantiate_images = False
 
 	        if self.game.input.new_bind[self.game.input.joystick_name] != -1: # must be -1 as 0 is used for a button id, unlike the keys
 	            if self.game.input.new_bind[self.game.input.joystick_name] not in [11,12,13,14]:
