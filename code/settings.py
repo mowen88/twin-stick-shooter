@@ -18,6 +18,8 @@ FONT = '../assets/font/DePixelHalbfett.ttf'
 #FONT = '../assets/font/BMSPA___.ttf'
 #FONT = '../assets/homespun.ttf'
 
+PLAYER_STATS = {'attack_lunge_speed':4}
+
 VOLUME = {'Master Volume':0.5,'Sound Volume':0.5,'Music Volume':0.5}
 DEFAULT_VOLUME = {'Master Volume':0.5,'Sound Volume':0.5,'Music Volume':0.5}
 

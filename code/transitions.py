@@ -2,7 +2,7 @@ import pygame
 from settings import *
 
 class Fade(pygame.sprite.Sprite):
-	def __init__(self, game, groups, speed, colour=COLOURS['white'], surf=pygame.Surface((RES)), z=5):
+	def __init__(self, game, groups, speed, colour=COLOURS['black'], surf=pygame.Surface((RES)), z=5):
 		super().__init__(groups)
 
 		self.game = game

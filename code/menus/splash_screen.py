@@ -12,7 +12,7 @@ class PygameLogo(State):
 		self.timer = 0
 		self.duration = 1
 		Entity([self.drawn_sprites], (WIDTH * 0.5, HEIGHT * 0.6), pygame.image.load('../assets/pygame_logo.png').convert_alpha(), 3)
-		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 800, (0,0,0))
+		self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 800)
 
 	def next_scene(self):
 		# splash screen never needed on state stack again

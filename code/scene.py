@@ -33,7 +33,7 @@ class Scene(State):
         self.crosshair_pos = RES/2
         self.crosshair = self.get_crosshair('game_cursor')
         self.menu = Pause(self.game, self)
-        self.transition = Fade(self.game, [self.update_sprites, self.drawn_sprites], 250, COLOURS['white'], pygame.Surface((self.camera.get_scene_size())))
+        self.transition = Fade(self.game, [self.update_sprites], 250, COLOURS['white'], pygame.Surface(RES))
     
         
     def create_scene(self):
@@ -101,11 +101,12 @@ class Scene(State):
         self.camera.draw(screen)
 
         if self.paused: self.menu.draw(screen)
+        if self.transition.alpha > 0: screen.blit(self.transition.image, (0,0))
  
         self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
                     str('Stack: ' + str(len(self.game.stack))),
                     str(self.player.timers['jump_buffer'].counter),
-                    str(self.player.state),
+                    str(self.player.facing),
                     None])
 
-        pygame.draw.rect(screen, COLOURS['white'], self.player.floor_raycast)
+        pygame.draw.rect(screen, COLOURS['green'], self.player.floor_raycast)

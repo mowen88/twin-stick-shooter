@@ -42,12 +42,16 @@ class Game:
     def get_input(self):
         self.input.get_input()
 
-    def render_text(self, text, colour, font, pos, alignment=False):
+    def render_text(self, text, colour, font, pos, alignment='center'):
         surf = font.render(str(text), False, colour)
-        if alignment == 'topleft': rect = surf.get_rect(topleft=pos)
-        elif alignment == 'topright': rect = surf.get_rect(topright=pos)
-        elif alignment == 'midtop': rect = suxrf.get_rect(midtop=pos)
-        else: rect = surf.get_rect(center = pos)
+        
+        rect_positions = {'topleft':surf.get_rect(topleft=pos), 'topright':surf.get_rect(topright=pos), 'midtop':surf.get_rect(midtop=pos),
+                'bottomleft':surf.get_rect(bottomleft=pos), 'bottomright':surf.get_rect(bottomright=pos), 'midbottom':surf.get_rect(midbottom=pos),
+                'midleft':surf.get_rect(midleft=pos), 'midright':surf.get_rect(midright=pos), 'center':surf.get_rect(center=pos)}
+        
+        for pos in rect_positions:
+            rect = rect_positions[alignment]
+
         self.screen.blit(surf, rect)
 
     def update(self, dt):
@@ -58,7 +62,7 @@ class Game:
         pygame.display.flip()
 
     def main_loop(self):
-        dt = self.clock.tick(60)/1000
+        dt = self.clock.tick()/1000
         events = pygame.event.get()
         self.input.get_input(events)
         self.audio.run()

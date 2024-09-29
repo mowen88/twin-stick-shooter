@@ -16,12 +16,12 @@ class NPC(pygame.sprite.Sprite):
         self.import_images(path)
         self.image = self.animations['idle'][self.frame_index].convert_alpha()
         self.rect = self.image.get_frect(center=pos)
-        self.hitbox = self.rect.inflate(-self.rect.width*0.7, -self.rect.height*0.5)
+        self.hitbox = self.rect.inflate(int(-self.rect.width*0.8), int(-self.rect.height*0.5))
         self.old_hitbox = self.hitbox.copy()
         self.wall_raycast = self.hitbox.inflate(2, 0)
         self.floor_raycast = pygame.FRect(0,0, self.hitbox.width, 2)
         self.gravity = 500
-        self.facing = 0
+        self.facing = 1
         self.speed = 100
         self.direction = pygame.math.Vector2(0, self.gravity)
         self.max_fall_speed = 400
@@ -39,15 +39,19 @@ class NPC(pygame.sprite.Sprite):
 
         self.image = next(iter(self.animations.values()))[0].convert_alpha()
 
-    def animate(self, state, loop=True):
+    def animate(self, dt, state, loop=True):
 
-            self.frame_index += 0.2
-            if self.frame_index >= len(self.animations[state]):
-                if loop: 
-                    self.frame_index = 0
-                else:
-                    self.frame_index = len(self.animations[state]) -1           
-            self.image = pygame.transform.flip(self.animations[state][int(self.frame_index)], self.facing, False)
+            self.frame_index += 15 * dt
+            frame_count = len(self.animations[state])
+
+            if self.frame_index >= frame_count:
+                self.frame_index = 0 if loop else frame_count -1
+            
+            image_flip = self.facing == -1 
+
+            facing = self.facing if self.facing == 1 else 0  
+            current_frame = self.animations[state][int(self.frame_index)]     
+            self.image = pygame.transform.flip(current_frame, image_flip, False)
 
     def get_raycast_collision(self, raycast_box):
         for sprite in self.scene.block_sprites:
@@ -81,7 +85,7 @@ class NPC(pygame.sprite.Sprite):
                     self.rect.centery = self.hitbox.centery
 
     def input(self, direction):
-        self.facing = 1 if direction == 1 else 0
+        self.facing = 1 if direction == 1 else -1
         self.direction.x = direction
 
     def jump(self):
@@ -95,12 +99,13 @@ class NPC(pygame.sprite.Sprite):
         if not self.get_raycast_collision(self.floor_raycast):
             self.on_ground = False
 
-    def move(self, dt, fall_speed):
-
+    def apply_gravity(self, dt):
         self.direction.y += self.gravity * dt
-        self.direction.y = min(fall_speed, self.direction.y)
-        
-        self.hitbox.centerx += self.direction.x * self.speed * dt
+        self.direction.y = min(self.max_fall_speed, self.direction.y)
+
+    def movement(self, dt):
+
+        self.hitbox.centerx += self.direction.x * dt
         self.rect.centerx = self.hitbox.centerx 
         self.collisions('x')
     
@@ -108,6 +113,7 @@ class NPC(pygame.sprite.Sprite):
         self.rect.centery = self.hitbox.centery
         self.collisions('y')
 
+        self.update_raycasts()
 
     def state_logic(self):
         new_state = self.state.state_logic(self)
@@ -115,10 +121,9 @@ class NPC(pygame.sprite.Sprite):
         else: self.state
 
     def update(self, dt):
-        
         self.state_logic()
         self.state.update(dt, self)
-        self.update_raycasts()
+        
         for timer in self.timers.values():
             timer.update(dt)
 
@@ -132,7 +137,8 @@ class Idle:
 
     def update(self, dt, npc):
         npc.animate('idle')
-        npc.move(npc.max_fall_speed)
+        npc.apply_gravity(dt)
+        npc.movement(dt)
 
 class Run(Idle):
     def __init__(self, npc):
@@ -148,7 +154,8 @@ class Run(Idle):
 
     def update(self, dt, npc):
         npc.animate('run')
-        npc.move(npc.max_fall_speed)
+        npc.apply_gravity(dt)
+        npc.movement(dt)
 
 
 class Fall:
@@ -163,7 +170,8 @@ class Fall:
 
     def update(self, dt, npc):
         npc.animate('fall', False)
-        npc.move(npc.max_fall_speed)
+        npc.apply_gravity(dt)
+        npc.movement(dt)
 
 
 
