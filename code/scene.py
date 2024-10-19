@@ -6,6 +6,7 @@ from pytmx.util_pygame import load_pygame
 from camera import Camera
 from menus.pause import Pause
 from entities import Entity, Block, AnimatedEntity
+from characters.npc import NPC
 from characters.player import Player
 from transitions import Fade, CirclesTransition
 from bullet import Bullet
@@ -46,6 +47,11 @@ class Scene(State):
                 if obj.name == self.entry_point:
                     self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (HALF_WIDTH, HALF_HEIGHT), 'characters/player', z=3)
                     self.target = self.player
+
+        if 'entities' in layers:
+            for obj in self.tmx_data.get_layer_by_name('entities'):
+                if obj.name == 'npc':
+                    self.npc = NPC(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'characters/randomer', z=3)
 
         if 'blocks' in layers:
             for x, y, surf in self.tmx_data.get_layer_by_name('blocks').tiles():
@@ -97,7 +103,7 @@ class Scene(State):
 
     def draw(self, screen):
 
-        screen.fill(COLOURS['burgundy'])
+        screen.fill(COLOURS['blue'])
         self.camera.draw(screen)
 
         if self.paused: self.menu.draw(screen)
@@ -106,7 +112,7 @@ class Scene(State):
         self.debug([str('FPS: '+ str(int(self.game.clock.get_fps()))),
                     str('Stack: ' + str(len(self.game.stack))),
                     str(self.player.timers['jump_buffer'].counter),
-                    str(self.player.facing),
+                    str(self.player.direction.x),
                     None])
 
-        pygame.draw.rect(screen, COLOURS['green'], self.player.floor_raycast)
+        pygame.draw.rect(screen, COLOURS['yellow'], self.player.floor_raycast)

@@ -1,8 +1,11 @@
 import pygame, pytweening
 from pygame.math import Vector2 as vec2
 from settings import *
+from support import tween
 from timer import Timer
+from characters.state_machine import BaseState
 from characters.npc import NPC
+
 
 class Player(NPC):
     def __init__(self, game, scene, groups, pos, path, z=2):
@@ -10,115 +13,133 @@ class Player(NPC):
         # attributes
 
         # timers
-        self.timers = {'jump_buffer':Timer(0.15),'jump':Timer(0.2),'dash':Timer(3600),'attack':Timer(0.8),'melee':Timer(3000),'fall':Timer(6000)}
+        self.timers = {'jump_buffer':Timer(0.10),'jump':Timer(0.2),'dash':Timer(3600),'attack':Timer(0.8),'melee':Timer(3000),'fall':Timer(6000)}
         self.state = Idle(self)
         self.speed = 120
+        self.jump_height = 260
 
     def input(self):
         if ACTIONS['Right']: 
-            self.direction.x = 1
-            self.facing = 1
+            self.move_x(1)
         elif ACTIONS['Left']:
-            self.direction.x = -1
-            self.facing = -1
+            self.move_x(-1)
         else:
-            self.direction.x = 0 
+            self.move_x(0)
 
-class Idle:
+class OnGround(BaseState):
     def __init__(self, player):
-        player.direction.x = 0
-        player.frame_index = 0
+        super().__init__(player)
         self.previous_facing = player.facing
-        player.jump_count = 0
-        player.dash_count = 0
 
     def state_logic(self, player):
-        if player.direction.x != 0:
-            if player.facing != self.previous_facing:
-                return Turn(player)
-            else:
-                return Run(player)
-
-        if player.on_ground:
-            if ACTIONS['Jump']: 
-                return Jump(player)
-            elif ACTIONS['Attack'] and player.on_ground:
-                return LeftHook(player)
-
-        # if SAVE_DATA['Items']['Dash'] and ACTIONS['Dash'] and not player.dash_timer.running:
-        #     return Dash(player)
-
-        # if ACTIONS['Attack'] and not player.melee_timer.running:
-        #     if player.game.keys[KEY_MAP['Up']] or player.game.controller[PS4_BUTTON_MAP['Up']] or PS4_AXIS_MAP['Up']:
-        #         return MeleeUp(player)
-        #     else:
-        #         return Melee(player)
+        pass
 
     def update(self, dt, player):
-        player.animate(dt, 'idle', False)
+        player.animate(dt, self.state_name, self.animation_loop)
         player.input()
         player.apply_gravity(dt)
-        player.direction.x *= player.speed
         player.movement(dt)
 
-class Run(Idle):
+class Idle(OnGround):
     def __init__(self, player):
-        Idle.__init__(self, player)
+        super().__init__(player)
+        # player.direction.x = 0
+        player.jump_count = 0
+        player.dash_count = 0
+        self.animation_loop = False
+
+    def state_logic(self, player):
+
+        if player.facing != self.previous_facing:
+            player.set_state(Turn(player))
+
+        elif player.direction.x != 0:
+            player.set_state(Run(player))
+
+        elif ACTIONS['Jump']: 
+            player.set_state(Jump(player))
+
+        elif ACTIONS['Attack']:
+            player.set_state(LeftHook(player))
+
+class Run(OnGround):
+    def __init__(self, player):
+        super().__init__(player)
+
+    def state_logic(self, player):
+
+        if player.facing != self.previous_facing:
+            player.set_state(Turn(player))
+
+        elif player.direction.x == 0:
+            player.set_state(Idle(player))
+        
+        elif player.direction.y > 0:
+            player.set_state(Fall(player))
+
+        elif ACTIONS['Jump']:
+            player.set_state(Jump(player))
+
+        elif ACTIONS['Attack']:
+            return LeftHook(player)
+
+class Turn(OnGround):
+    def __init__(self, player):
+        super().__init__(player)
 
     def state_logic(self, player):
 
         if player.facing != self.previous_facing:
             return Turn(player)
-        
-        if player.direction.x == 0:
-            return Idle(player)
 
-        if player.direction.y > 0:
-            return Fall(player)
+        elif player.direction.y > 0:
+            player.set_state(Fall(player))
 
-        if player.on_ground:
-            if ACTIONS['Jump']: 
-                return Jump(player)
-            elif ACTIONS['Attack'] and player.on_ground:
-                return LeftHook(player)
+        elif ACTIONS['Jump']:
+            player.set_state(Jump(player))
 
+        elif ACTIONS['Attack'] and player.on_ground:
+            return LeftHook(player)
 
-    def update(self, dt, player):
-        player.animate(dt, 'run')
-        player.input()
-        player.apply_gravity(dt)
-        player.direction.x *= player.speed
-        player.movement(dt)
+        elif player.frame_index > len(player.animations[self.state_name])-1:
+            player.set_state(Idle(player))
 
-class Turn(Idle):
+class Land(Turn):
     def __init__(self, player):
-        Idle.__init__(self, player)
+        super().__init__(player)
+        self.animation_loop = False
+
+class LeftHook(OnGround):
+    def __init__(self, player):
+        super().__init__(player)
+        ACTIONS['Attack'] = 0
+        self.combo_pending = False
+        #player.direction.x = PLAYER_STATS['attack_lunge_speed']
+        self.timer = player.timers['attack']
+        self.timer.stop()
+        self.timer.start()
+        self.initial_speed = 60
+        self.direction = vec2(player.facing * self.initial_speed, 0)
 
     def state_logic(self, player):
 
-        if player.frame_index >= len(player.animations['turn'])-1:
-            return Run(player)
+        if not self.timer.running:
+            if self.combo_pending:
+                player.set_state(LeftHook(player))
+            else:
+                player.set_state(Idle(player))
 
-        if player.direction.y > 0:
-            return Fall(player)
-
-        if player.on_ground:
-            if ACTIONS['Jump']: 
-                return Jump(player)
-            elif ACTIONS['Attack'] and player.on_ground:
-                return LeftHook(player)
-
+        elif ACTIONS['Attack']:
+            self.combo_pending = True
 
     def update(self, dt, player):
-        player.animate(dt, 'turn')
-        player.input()
-        player.apply_gravity(dt)
-        player.direction.x *= player.speed
+        tween(self.direction, self.timer, dt, player)
         player.movement(dt)
+        player.animate(dt, self.state_name, False)
 
-class Fall:
+class Fall(BaseState):
     def __init__(self, player):
-        player.frame_index = 0
+        super().__init__(player)
         ACTIONS['Jump'] = 0
 
     def state_logic(self, player):
@@ -133,27 +154,26 @@ class Fall:
         if player.on_ground:
             if player.timers['jump_buffer'].running:
                 ACTIONS['Jump'] = 1
-                return Jump(player)
+                player.set_state(Jump(player))
             else:
-                return Idle(player)
+                player.set_state(Land(player))
 
     def update(self, dt, player):
-        player.animate(dt, 'fall', False)
+        player.animate(dt, self.state_name, False)
         player.input()
         player.apply_gravity(dt)
-        player.direction.x *= player.speed
         player.movement(dt)
 
-class Jump:
+class Jump(BaseState):
     def __init__(self, player):
+        super().__init__(player)
         player.timers['jump'].start()
-        player.frame_index = 0
 
     def state_logic(self, player):
 
         if player.direction.y >= 0:
             player.timers['jump'].stop()
-            return Fall(player)
+            player.set_state(Fall(player))
 
         elif not ACTIONS['Jump']:
             player.timers['jump'].stop()
@@ -162,75 +182,11 @@ class Jump:
 
     def update(self, dt, player):
         player.jump()
-        player.animate(dt, 'jump', False)
+        player.animate(dt, self.state_name, False)
         player.input()
         player.apply_gravity(dt)
-        player.direction.x *= player.speed
         player.movement(dt)
 
-class LeftHook:
-    def __init__(self, player):
-        player.frame_index = 0
-        ACTIONS['Attack'] = 0
-        self.combo_pending = False
-        self.speed = 40
-        #player.direction.x = PLAYER_STATS['attack_lunge_speed']
-        self.timer = player.timers['attack']
-        self.timer.stop()
-        self.timer.start()
 
-    def tween(self, dt, player):
-        self.timer.update(dt)
-        if self.timer.running:
-            progress = self.timer.counter / self.timer.duration
-            tween_progress = pytweening.easeOutQuad(1 - progress)
-            target_direction = vec2(player.facing * self.speed, 0)
-
-            player.direction.x = target_direction.x * tween_progress
-            player.direction.y = target_direction.y * tween_progress
-
-        player.hitbox.centerx += player.direction.x * dt
-        player.rect.centerx = player.hitbox.centerx 
-        player.collisions('x')
-    
-        player.hitbox.centery += player.direction.y * dt
-        player.rect.centery = player.hitbox.centery
-        player.collisions('y')
-
-        player.update_raycasts()
-
-    def state_logic(self, player):
-
-        if ACTIONS['Attack']:
-            self.combo_pending = True
-        
-        if not self.timer.running:
-            if self.combo_pending:
-                return RightHook(player)
-            else:
-                return Idle(player)
-
-    def update(self, dt, player):
-        self.tween(dt, player)
-        player.animate(dt, 'left_hook', False)
-
-class RightHook(LeftHook):
-    def __init__(self, player):
-        super().__init__(player)
-
-    def state_logic(self, player):
-
-        if ACTIONS['Attack']:
-            self.combo_pending = True
-        
-        if not self.timer.running:
-            if self.combo_pending:
-                return RightHook(player)
-            else:
-                return Idle(player)
-
-    def update(self, dt, player):
-        self.tween(dt, player)
-        player.animate(dt, 'right_hook', False)
 
         

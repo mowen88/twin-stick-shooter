@@ -4,6 +4,7 @@ import pygame
 from settings import *
 from timer import Timer
 from support import get_animations, get_images
+from characters.state_machine import BaseState
 
 class NPC(pygame.sprite.Sprite):
     def __init__(self, game, scene, groups, pos, path, z):
@@ -16,11 +17,12 @@ class NPC(pygame.sprite.Sprite):
         self.import_images(path)
         self.image = self.animations['idle'][self.frame_index].convert_alpha()
         self.rect = self.image.get_frect(center=pos)
-        self.hitbox = self.rect.inflate(int(-self.rect.width*0.8), int(-self.rect.height*0.5))
+        self.hitbox = self.rect.inflate(int(-self.rect.width*0.75), int(-self.rect.height*0.5))
         self.old_hitbox = self.hitbox.copy()
         self.wall_raycast = self.hitbox.inflate(2, 0)
         self.floor_raycast = pygame.FRect(0,0, self.hitbox.width, 2)
         self.gravity = 500
+        self.jump_height = 250
         self.facing = 1
         self.speed = 100
         self.direction = pygame.math.Vector2(0, self.gravity)
@@ -84,13 +86,17 @@ class NPC(pygame.sprite.Sprite):
 
                     self.rect.centery = self.hitbox.centery
 
-    def input(self, direction):
-        self.facing = 1 if direction == 1 else -1
-        self.direction.x = direction
+    def set_state(self, state):
+        self.state = state
+
+    def move_x(self, direction):
+        if direction == 1: self.facing = 1
+        elif direction == -1: self.facing = -1
+        self.direction.x = direction * self.speed
 
     def jump(self):
         if self.timers['jump'].running:
-            self.direction.y = -250
+            self.direction.y = -self.jump_height
 
     def update_raycasts(self):
         self.old_hitbox = self.hitbox.copy()
@@ -127,49 +133,51 @@ class NPC(pygame.sprite.Sprite):
         for timer in self.timers.values():
             timer.update(dt)
 
-class Idle:
+class Idle(BaseState):
     def __init__(self, npc):
-        npc.frame_index = 0
+        super().__init__(npc)
 
     def state_logic(self, npc):
         if npc.direction.x != 0:
-            return Run(npc)
+            npc.set_state(Run(npc))
 
     def update(self, dt, npc):
-        npc.animate('idle')
+        npc.move_x(-1)
+        npc.animate(dt, self.state_name)
         npc.apply_gravity(dt)
         npc.movement(dt)
 
-class Run(Idle):
+class Run(BaseState):
     def __init__(self, npc):
-        Idle.__init__(self, npc)
+        super().__init__(npc)
 
     def state_logic(self, npc):
 
         if npc.direction.x == 0:
-            return Idle(npc)
+            npc.set_state(Idle(npc))
 
         if npc.direction.y > 0:
-            return Fall(npc)
+            npc.set_state(Fall(npc))
 
     def update(self, dt, npc):
-        npc.animate('run')
+        npc.move_x(-1)
+        npc.animate(dt, self.state_name)
         npc.apply_gravity(dt)
         npc.movement(dt)
 
 
-class Fall:
+class Fall(BaseState):
     def __init__(self, npc):
-        npc.frame_index = 0
+        super().__init__(npc)
         npc.hit_wall = False
 
     def state_logic(self, npc):
 
         if npc.on_ground:
-            return Idle(npc)
+            npc.set_state(Idle(npc))
 
     def update(self, dt, npc):
-        npc.animate('fall', False)
+        npc.animate(dt, self.state_name, False)
         npc.apply_gravity(dt)
         npc.movement(dt)
 

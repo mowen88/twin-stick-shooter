@@ -12,15 +12,16 @@ class Entity(pygame.sprite.Sprite):
 
     def get_pos(self, pos, alignment):
         rect_methods = {
-            'topleft': self.image.get_rect(topleft=pos),
-            'topright': self.image.get_rect(topright=pos),
-            'bottomleft': self.image.get_rect(bottomleft=pos),
-            'bottomright': self.image.get_rect(bottomright=pos),
-            'midleft': self.image.get_rect(midleft=pos),
-            'midright': self.image.get_rect(midright=pos),
-            'midtop': self.image.get_rect(midtop=pos),
+            'topleft': self.image.get_frect(topleft=pos),
+            'topright': self.image.get_frect(topright=pos),
+            'bottomleft': self.image.get_frect(bottomleft=pos),
+            'bottomright': self.image.get_frect(bottomright=pos),
+            'midleft': self.image.get_frect(midleft=pos),
+            'midright': self.image.get_frect(midright=pos),
+            'midtop': self.image.get_frect(midtop=pos),
+            'midbottom': self.image.get_frect(midbottom=pos),
         }
-        return rect_methods.get(alignment, self.image.get_rect(center=pos))
+        return rect_methods.get(alignment, self.image.get_frect(center=pos))
 
 class Block(Entity):
     def __init__(self, groups, pos, surf=pygame.Surface((TILESIZE, TILESIZE)), z=1, alignment='center'):

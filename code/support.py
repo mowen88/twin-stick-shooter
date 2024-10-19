@@ -1,5 +1,15 @@
-import pygame, sys, os, json
+import pygame, sys, os, json, pytweening
+from pygame.math import Vector2 as vec2
 from settings import *
+
+def tween(direction, timer, dt, entity):
+    timer.update(dt)
+    if timer.running:
+        progress = timer.counter / timer.duration
+        tween_progress = pytweening.easeOutQuad(1 - progress)
+
+        entity.direction.x = direction.x * tween_progress
+        entity.direction.y = direction.y * tween_progress
 
 def get_csv_layer(path):
     grid = []

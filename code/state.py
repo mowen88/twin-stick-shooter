@@ -1,8 +1,9 @@
 import pygame
+from abc import ABC, abstractmethod
 from settings import *
 from entities import Entity
 
-class State():
+class State(ABC):
 	def __init__(self, game):
 		self.game = game
 		self.prev_state = None

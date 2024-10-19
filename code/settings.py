@@ -25,7 +25,7 @@ DEFAULT_VOLUME = {'Master Volume':0.5,'Sound Volume':0.5,'Music Volume':0.5}
 
 COLOURS = {
 			'purple':(69,41,63), 'cyan':(143,248,226), 'black':(46,34,47), 'white':(255,255,255), 'olive':(49,54,56),'pale_yellow':(201,204,161),
-			'yellow':(202,160,90),'orange':(174,106,71), 'deep_red':(110,39,39), 'red':(179,56,49), 'burgundy':(84,51,68), 'grey':(81,82,98),'green':(22,90,76),
+			'yellow':(202,160,90),'orange':(174,106,71), 'deep_red':(110,39,39), 'red':(179,56,49), 'burgundy':(158,30,47), 'grey':(81,82,98),'green':(22,90,76),
 			'pale_green':(142,160,145), 'brown':(110,39,39), 'salmon':(158,69,57), 'dark_pink':(122,48,69), 'lavender':(107,62,117), 'blue':(72,74,119),
 			'deep_blue':(50,51,83), 'teal':(11,138,143), 'hot_pink':(240,79,120)
 			}
