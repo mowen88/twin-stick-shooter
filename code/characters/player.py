@@ -118,7 +118,7 @@ class LeftHook(OnGround):
         self.timer = player.timers['attack']
         self.timer.stop()
         self.timer.start()
-        self.initial_speed = 60
+        self.initial_speed = -60
         self.direction = vec2(player.facing * self.initial_speed, 0)
 
     def state_logic(self, player):

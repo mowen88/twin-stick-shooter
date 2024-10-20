@@ -14,6 +14,7 @@ class InputManager:
         self.bind_mode = False
         self.new_bind = {'Keyboard':0,'Xbox 360 Controller':-1,'PS4 Controller':-1,'DualSense Wireless Controller':-1,'Nintendo Switch Pro Controller':-1}
         self.mouse_pos = vec2()
+        self.prev_mouse_pos = self.mouse_pos.copy()
         pygame.mouse.set_visible(False)
 
     def update_control_type(self):
@@ -201,6 +202,7 @@ class InputManager:
                 self.get_hats()
 
             else:
+                
                 self.mouse_pos = pygame.mouse.get_pos()
 
                 if event.type == pygame.JOYDEVICEADDED:

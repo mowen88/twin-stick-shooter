@@ -16,6 +16,7 @@ class BaseMenu:
 		self.line_spacing = TILESIZE
 		self.element_list = ['']
 		self.index = 0
+		self.prev_mouse_pos = (0,0)
 		self.selection = self.element_list[self.index]
 		self.menu_sprites = pygame.sprite.Group()
 		self.elements = self.get_elements()
@@ -81,19 +82,28 @@ class BaseMenu:
 		return elements
 
 	def mouse_navigation(self):
+	    current_mouse_pos = self.game.input.mouse_pos
+	    prev_index = self.index
 
-		prev_index = self.index
-		for index, element in enumerate(self.elements):
-			element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
-			if element_rect.collidepoint(self.game.input.mouse_pos):
-				self.index = index
-				if ACTIONS['Left Click']:
-					ACTIONS['Confirm'] = 1
-		
-		if self.index != prev_index:
-			self.game.audio.sfx['navigate'].play()
-			for cursor in self.cursors:
-				cursor.frame_index = 0
+	    # Check if the mouse has moved
+	    if current_mouse_pos != self.prev_mouse_pos:
+	        for index, element in enumerate(self.elements):
+	            element_rect = pygame.Rect(self.panel_element.rect.x, element.rect.y - 2, self.panel_element.rect.width, element.rect.height + 4)
+	            if element_rect.collidepoint(current_mouse_pos):
+	                self.index = index
+	                break  # Stop checking further once found element
+
+	    # Check if left click is pressed on the current element even if the mouse didn't move
+	    if ACTIONS['Left Click'] and pygame.Rect(self.panel_element.rect.x, self.elements[self.index].rect.y - 2, self.panel_element.rect.width, self.elements[self.index].rect.height + 4).collidepoint(current_mouse_pos):
+	        ACTIONS['Confirm'] = 1
+
+	    # Highlight with keyboard if the mouse hasn't moved
+	    if self.index != prev_index:
+	        self.game.audio.sfx['navigate'].play()
+	        for cursor in self.cursors:
+	            cursor.frame_index = 0
+
+	    self.prev_mouse_pos = current_mouse_pos
 
 	def navigate(self):
 

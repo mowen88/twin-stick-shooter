@@ -8,6 +8,7 @@ from menus.pause import Pause
 from entities import Entity, Block, AnimatedEntity
 from characters.npc import NPC
 from characters.player import Player
+from characters.crawler import Crawler
 from transitions import Fade, CirclesTransition
 from bullet import Bullet
 
@@ -25,6 +26,7 @@ class Scene(State):
         self.entry_point = entry_point
 
         self.block_sprites = pygame.sprite.Group()
+        self.enemy_sprites = pygame.sprite.Group()
 
         self.camera = Camera(self) 
         self.tmx_data = load_pygame(f'../scenes/{self.current_scene}/{self.current_scene}.tmx')
@@ -45,17 +47,19 @@ class Scene(State):
         if 'entries' in layers:
             for obj in self.tmx_data.get_layer_by_name('entries'):
                 if obj.name == self.entry_point:
-                    self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (HALF_WIDTH, HALF_HEIGHT), 'characters/player', z=3)
+                    self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'characters/player', z=3)
                     self.target = self.player
 
         if 'entities' in layers:
             for obj in self.tmx_data.get_layer_by_name('entities'):
                 if obj.name == 'npc':
                     self.npc = NPC(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'characters/randomer', z=3)
+                if obj.name == 'crawler': 
+                    self.crawler = Crawler(self.game, self, [self.enemy_sprites, self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'characters/crawler', z=3, facing=-1)
 
         if 'blocks' in layers:
             for x, y, surf in self.tmx_data.get_layer_by_name('blocks').tiles():
-                Block([self.block_sprites, self.drawn_sprites], (x * TILESIZE, y * TILESIZE), pygame.Surface((TILESIZE,TILESIZE)), 3, 'topleft')
+                Block([self.block_sprites, self.drawn_sprites], (x * TILESIZE, y * TILESIZE), surf, 3, 'topleft')
 
     def get_crosshair(self, cursor_type):
         pos = pygame.mouse.get_pos() if not self.game.input.joystick else self.crosshair_pos
